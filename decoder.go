@@ -3,14 +3,13 @@ package compression
 import (
 	"bufio"
 	"bytes"
-	//	"fmt"
 	"io"
 	"os"
 )
 
 // Decoder interface.
 type Decoder interface {
-	Decode(v []byte) error
+	Decode(v []byte) (int, error)
 }
 
 // DecoderOption function.
@@ -32,23 +31,46 @@ func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) Decoder {
 }
 
 // FromBytes method.
-func FromBytes(algo string, encoded []byte, v []byte, opts ...DecoderOption) error {
+/*
+func FromBytes(algo string, encoded []byte, dst []byte, opts ...DecoderOption) ([]byte, error) {
 	r := bufio.NewReader(bytes.NewReader(encoded))
-	return NewDecoder(algo, r, opts...).Decode(v)
+	return nil, NewDecoder(algo, r, opts...).Decode(dst)
 }
+*/
 
 // FromFile method.
-func FromFile(algo string, file string, v []byte, opts ...DecoderOption) error {
+func FromFile(algo string, file string, dst []byte, opts ...DecoderOption) ([]byte, error) {
 	fp, err := os.Open(file)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	r := bufio.NewReader(fp)
 
-	if err := NewDecoder(algo, r, opts...).Decode(v); err != nil {
-		return err
+	if dst != nil {
+		if _, err := NewDecoder(algo, r, opts...).Decode(dst); err != nil {
+			return nil, err
+		}
+		return nil, fp.Close()
 	}
 
-	return fp.Close()
+	dec := NewDecoder(algo, r, opts...)
+
+	buf := bytes.Buffer{}
+	b := make([]byte, 8)
+	for {
+		n, err := dec.Decode(b)
+		if n > 0 {
+			buf.Write(b[:n])
+		}
+
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return buf.Bytes(), fp.Close()
 }

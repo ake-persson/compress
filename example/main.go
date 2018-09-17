@@ -15,8 +15,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	b := make([]byte, 100)
-	if err := compression.FromFile("snappy", "example.snappy", b); err != nil {
+	b, err := compression.FromFile("snappy", "example.snappy", nil)
+	if err != nil {
 		log.Fatal(err)
 	}
 
