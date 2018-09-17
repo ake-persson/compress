@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/mickep76/compression"
+	_ "github.com/mickep76/compression/gzip"
 	_ "github.com/mickep76/compression/snappy"
 	_ "github.com/mickep76/compression/xz"
 )
@@ -17,7 +17,7 @@ import (
 
 func main() {
 	text := "abc123\ndef456\nabc123\ndef456\nabc123\ndef456\n"
-	algo := "snappy"
+	algo := "gzip"
 	file := "example." + algo
 
 	if err := compression.ToFile(algo, file, []byte(text)); err != nil {
@@ -30,8 +30,4 @@ func main() {
 	}
 
 	fmt.Print(string(b))
-
-	if err := os.Remove(file); err != nil {
-		log.Fatal(err)
-	}
 }
