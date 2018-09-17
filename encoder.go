@@ -14,7 +14,7 @@ type Encoder interface {
 }
 
 // EncoderOption variadic function.
-type EncoderOption func(Encoder)
+type EncoderOption func(Encoder) error
 
 // NewEncoder variadic constructor.
 func NewEncoder(algo string, w io.Writer, opts ...EncoderOption) (Encoder, error) {
@@ -29,7 +29,9 @@ func NewEncoder(algo string, w io.Writer, opts ...EncoderOption) (Encoder, error
 	}
 
 	for _, opt := range opts {
-		opt(enc)
+		if err := opt(enc); err != nil {
+			return nil, err
+		}
 	}
 
 	return enc, nil

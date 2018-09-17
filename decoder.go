@@ -16,7 +16,7 @@ type Decoder interface {
 }
 
 // DecoderOption function.
-type DecoderOption func(Decoder)
+type DecoderOption func(Decoder) error
 
 // NewDecoder variadic constructor.
 func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error) {
@@ -31,7 +31,9 @@ func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error
 	}
 
 	for _, opt := range opts {
-		opt(dec)
+		if err := opt(dec); err != nil {
+			return nil, err
+		}
 	}
 
 	return dec, nil
