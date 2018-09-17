@@ -9,7 +9,7 @@ import (
 
 // Encoder interface.
 type Encoder interface {
-	Encode(value interface{}) error
+	Encode(v []byte) error
 }
 
 // EncoderOption variadic function.

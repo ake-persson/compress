@@ -9,7 +9,7 @@ import (
 
 // Decoder interface.
 type Decoder interface {
-	Decode(value []byte) error
+	Decode(v []byte) error
 }
 
 // DecoderOption function.

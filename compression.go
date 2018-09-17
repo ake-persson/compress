@@ -26,11 +26,11 @@ func Registered(name string) bool {
 	return true
 }
 
-// Algorightms registered.
+// Algorithms registered.
 func Algorithms() []string {
-	algos := []string{}
+	list := []string{}
 	for k := range algorithms {
-		algos = append(algos, k)
+		list = append(list, k)
 	}
-	return algos
+	return list
 }
