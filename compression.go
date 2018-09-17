@@ -1,0 +1,36 @@
+package compression
+
+import (
+	"io"
+)
+
+var algorithms = make(map[string]Algorithm)
+
+// Algorithm interface.
+type Algorithm interface {
+	NewEncoder(writer io.Writer) Encoder
+	NewDecoder(reader io.Reader) Decoder
+}
+
+// Register algorithm.
+func Register(name string, algorithm Algorithm) {
+	algorithms[name] = algorithm
+}
+
+// Registered algorithm.
+func Registered(name string) bool {
+	_, ok := encodings[name]
+	if !ok {
+		return false
+	}
+	return true
+}
+
+// Algorightms registered.
+func Algorithms() []string {
+	algos := []string{}
+	for k := range algorithms {
+		algos = append(algos, k)
+	}
+	return algos
+}
