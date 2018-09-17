@@ -10,12 +10,12 @@ import (
 
 type algorithm struct{}
 
-func (a *algorithm) NewEncoder(writer io.Writer) compression.Encoder {
-	return &encoder{encoder: snappy.NewWriter(writer)}
+func (a *algorithm) NewEncoder(writer io.Writer) (compression.Encoder, error) {
+	return &encoder{encoder: snappy.NewWriter(writer)}, nil
 }
 
-func (a *algorithm) NewDecoder(reader io.Reader) compression.Decoder {
-	return &decoder{decoder: snappy.NewReader(reader)}
+func (a *algorithm) NewDecoder(reader io.Reader) (compression.Decoder, error) {
+	return &decoder{decoder: snappy.NewReader(reader)}, nil
 }
 
 func init() {

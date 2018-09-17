@@ -3,6 +3,7 @@ package compression
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 )
@@ -18,23 +19,30 @@ type Decoder interface {
 type DecoderOption func(Decoder)
 
 // NewDecoder variadic constructor.
-func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) Decoder {
+func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error) {
 	c, ok := algorithms[algo]
 	if !ok {
-		return nil
+		return nil, fmt.Errorf("algorithm is not registered: %s", algo)
 	}
 
-	dec := c.NewDecoder(r)
+	dec, err := c.NewDecoder(r)
+	if err != nil {
+		return nil, err
+	}
+
 	for _, opt := range opts {
 		opt(dec)
 	}
 
-	return dec
+	return dec, nil
 }
 
 // FromBytes method.
 func FromBytes(algo string, encoded []byte, dst []byte, opts ...DecoderOption) ([]byte, error) {
-	dec := NewDecoder(algo, bufio.NewReader(bytes.NewReader(encoded)), opts...)
+	dec, err := NewDecoder(algo, bufio.NewReader(bytes.NewReader(encoded)), opts...)
+	if err != nil {
+		return nil, err
+	}
 
 	if dst != nil {
 		if _, err := dec.Decode(dst); err != nil {
@@ -69,7 +77,10 @@ func FromFile(algo string, file string, dst []byte, opts ...DecoderOption) ([]by
 		return nil, err
 	}
 
-	dec := NewDecoder(algo, bufio.NewReader(fp), opts...)
+	dec, err := NewDecoder(algo, bufio.NewReader(fp), opts...)
+	if err != nil {
+		return nil, err
+	}
 
 	if dst != nil {
 		if _, err := dec.Decode(dst); err != nil {

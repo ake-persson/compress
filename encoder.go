@@ -3,6 +3,7 @@ package compression
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 )
@@ -16,25 +17,34 @@ type Encoder interface {
 type EncoderOption func(Encoder)
 
 // NewEncoder variadic constructor.
-func NewEncoder(algorithm string, w io.Writer, opts ...EncoderOption) Encoder {
-	c, ok := algorithms[algorithm]
+func NewEncoder(algo string, w io.Writer, opts ...EncoderOption) (Encoder, error) {
+	c, ok := algorithms[algo]
 	if !ok {
-		return nil
+		return nil, fmt.Errorf("algorithm is not registered: %s", algo)
 	}
 
-	enc := c.NewEncoder(w)
+	enc, err := c.NewEncoder(w)
+	if err != nil {
+		return nil, err
+	}
+
 	for _, opt := range opts {
 		opt(enc)
 	}
 
-	return enc
+	return enc, nil
 }
 
 // ToBytes method.
 func ToBytes(algo string, v []byte, opts ...EncoderOption) ([]byte, error) {
 	var buf bytes.Buffer
 
-	if _, err := NewEncoder(algo, &buf, opts...).Encode(v); err != nil {
+	enc, err := NewEncoder(algo, &buf, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := enc.Encode(v); err != nil {
 		return nil, err
 	}
 
@@ -50,7 +60,12 @@ func ToFile(algo string, file string, v []byte, opts ...EncoderOption) error {
 
 	w := bufio.NewWriter(fp)
 
-	if _, err := NewEncoder(algo, w, opts...).Encode(v); err != nil {
+	enc, err := NewEncoder(algo, w, opts...)
+	if err != nil {
+		return err
+	}
+
+	if _, err := enc.Encode(v); err != nil {
 		return err
 	}
 
