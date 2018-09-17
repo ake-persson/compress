@@ -7,6 +7,5 @@ type decoder struct {
 }
 
 func (d *decoder) Decode(v []byte) (int, error) {
-	n, err := d.decoder.Read(v)
-	return n, err
+	return d.decoder.Read(v)
 }
