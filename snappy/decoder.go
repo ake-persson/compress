@@ -1,6 +1,10 @@
 package snappy
 
-import "github.com/golang/snappy"
+import (
+	"fmt"
+
+	"github.com/golang/snappy"
+)
 
 type decoder struct {
 	decoder *snappy.Reader
