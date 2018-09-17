@@ -19,7 +19,7 @@ func Register(name string, algorithm Algorithm) {
 
 // Registered algorithm.
 func Registered(name string) bool {
-	_, ok := encodings[name]
+	_, ok := algorithms[name]
 	if !ok {
 		return false
 	}
