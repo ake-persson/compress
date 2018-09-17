@@ -5,12 +5,12 @@ import (
 
 	"github.com/ulikunitz/xz"
 
-	"github.com/mickep76/compression"
+	"github.com/mickep76/compress"
 )
 
 type algorithm struct{}
 
-func (a *algorithm) NewEncoder(w io.Writer) (compression.Encoder, error) {
+func (a *algorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	enc, err := xz.NewWriter(w)
 	if err != nil {
 		return nil, err
@@ -18,7 +18,7 @@ func (a *algorithm) NewEncoder(w io.Writer) (compression.Encoder, error) {
 	return &encoder{encoder: enc}, nil
 }
 
-func (a *algorithm) NewDecoder(r io.Reader) (compression.Decoder, error) {
+func (a *algorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	dec, err := xz.NewReader(r)
 	if err != nil {
 		return nil, err
@@ -27,5 +27,5 @@ func (a *algorithm) NewDecoder(r io.Reader) (compression.Decoder, error) {
 }
 
 func init() {
-	compression.Register("xz", &algorithm{})
+	compress.Register("xz", &algorithm{})
 }

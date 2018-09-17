@@ -1,33 +1,41 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"strings"
 
-	"github.com/mickep76/compression"
-	_ "github.com/mickep76/compression/gzip"
-	_ "github.com/mickep76/compression/snappy"
-	_ "github.com/mickep76/compression/xz"
+	"github.com/mickep76/compress"
+	_ "github.com/mickep76/compress/gzip"
+	_ "github.com/mickep76/compress/snappy"
+	_ "github.com/mickep76/compress/xz"
 )
 
-// flags
-// file
-// output
-// algo
-
 func main() {
-	text := "abc123\ndef456\nabc123\ndef456\nabc123\ndef456\n"
-	algo := "gzip"
-	file := "example." + algo
+	file := flag.String("f", "", "File.")
+	out := flag.String("o", "example", "Output.")
+	algo := flag.String("a", "gzip", fmt.Sprintf("Algorithms: [%s].", strings.Join(compress.Algorithms(), ", ")))
+	exp := flag.Bool("x", false, "Expand.")
 
-	if err := compression.ToFile(algo, file, []byte(text)); err != nil {
-		log.Fatal(err)
+	flag.Parse()
+
+	if *exp {
+		b, err := compress.FromFile(*algo, *file, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Print(string(b))
+	} else {
+		b, err := ioutil.ReadFile(*file)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if err := compress.ToFile(*algo, fmt.Sprintf("%s.%s", *out, *algo), b); err != nil {
+			log.Fatal(err)
+		}
 	}
-
-	b, err := compression.FromFile(algo, file, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Print(string(b))
 }
