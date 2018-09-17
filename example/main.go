@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/mickep76/compression"
 	_ "github.com/mickep76/compression/snappy"
@@ -21,4 +22,8 @@ func main() {
 	}
 
 	fmt.Print(string(b))
+
+	if err := os.Remove("example.snappy"); err != nil {
+		log.Fatal(err)
+	}
 }

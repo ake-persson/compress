@@ -9,32 +9,32 @@ import (
 
 // Encoder interface.
 type Encoder interface {
-	Encode(v []byte) error
+	Encode(v []byte) (int, error)
 }
 
 // EncoderOption variadic function.
 type EncoderOption func(Encoder)
 
 // NewEncoder variadic constructor.
-func NewEncoder(algorithm string, writer io.Writer, options ...EncoderOption) Encoder {
+func NewEncoder(algorithm string, w io.Writer, opts ...EncoderOption) Encoder {
 	c, ok := algorithms[algorithm]
 	if !ok {
 		return nil
 	}
 
-	enc := c.NewEncoder(writer)
-	for _, option := range options {
-		option(enc)
+	enc := c.NewEncoder(w)
+	for _, opt := range opts {
+		opt(enc)
 	}
 
 	return enc
 }
 
 // ToBytes method.
-func ToBytes(algorithm string, value []byte, options ...EncoderOption) ([]byte, error) {
+func ToBytes(algo string, v []byte, opts ...EncoderOption) ([]byte, error) {
 	var buf bytes.Buffer
 
-	if err := NewEncoder(algorithm, &buf, options...).Encode(value); err != nil {
+	if _, err := NewEncoder(algo, &buf, opts...).Encode(v); err != nil {
 		return nil, err
 	}
 
@@ -42,7 +42,7 @@ func ToBytes(algorithm string, value []byte, options ...EncoderOption) ([]byte, 
 }
 
 // ToFile method.
-func ToFile(algorithm string, file string, value []byte, options ...EncoderOption) error {
+func ToFile(algo string, file string, v []byte, opts ...EncoderOption) error {
 	fp, err := os.Create(file)
 	if err != nil {
 		return err
@@ -50,7 +50,7 @@ func ToFile(algorithm string, file string, value []byte, options ...EncoderOptio
 
 	w := bufio.NewWriter(fp)
 
-	if err := NewEncoder(algorithm, w, options...).Encode(value); err != nil {
+	if _, err := NewEncoder(algo, w, opts...).Encode(v); err != nil {
 		return err
 	}
 

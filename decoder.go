@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+const BufSize = 4096
+
 // Decoder interface.
 type Decoder interface {
 	Decode(v []byte) (int, error)
@@ -31,12 +33,34 @@ func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) Decoder {
 }
 
 // FromBytes method.
-/*
 func FromBytes(algo string, encoded []byte, dst []byte, opts ...DecoderOption) ([]byte, error) {
-	r := bufio.NewReader(bytes.NewReader(encoded))
-	return nil, NewDecoder(algo, r, opts...).Decode(dst)
+	dec := NewDecoder(algo, bufio.NewReader(bytes.NewReader(encoded)), opts...)
+
+	if dst != nil {
+		if _, err := dec.Decode(dst); err != nil {
+			return nil, err
+		}
+		return nil, nil
+	}
+
+	buf := bytes.Buffer{}
+	b := make([]byte, BufSize)
+	for {
+		n, err := dec.Decode(b)
+		if n > 0 {
+			buf.Write(b[:n])
+		}
+
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return buf.Bytes(), nil
 }
-*/
 
 // FromFile method.
 func FromFile(algo string, file string, dst []byte, opts ...DecoderOption) ([]byte, error) {
@@ -45,19 +69,17 @@ func FromFile(algo string, file string, dst []byte, opts ...DecoderOption) ([]by
 		return nil, err
 	}
 
-	r := bufio.NewReader(fp)
+	dec := NewDecoder(algo, bufio.NewReader(fp), opts...)
 
 	if dst != nil {
-		if _, err := NewDecoder(algo, r, opts...).Decode(dst); err != nil {
+		if _, err := dec.Decode(dst); err != nil {
 			return nil, err
 		}
 		return nil, fp.Close()
 	}
 
-	dec := NewDecoder(algo, r, opts...)
-
 	buf := bytes.Buffer{}
-	b := make([]byte, 8)
+	b := make([]byte, BufSize)
 	for {
 		n, err := dec.Decode(b)
 		if n > 0 {

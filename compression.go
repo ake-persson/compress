@@ -28,9 +28,9 @@ func Registered(name string) bool {
 
 // Algorithms registered.
 func Algorithms() []string {
-	list := []string{}
+	l := []string{}
 	for k := range algorithms {
-		list = append(list, k)
+		l = append(l, k)
 	}
-	return list
+	return l
 }

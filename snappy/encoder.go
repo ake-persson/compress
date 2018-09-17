@@ -6,7 +6,6 @@ type encoder struct {
 	encoder *snappy.Writer
 }
 
-func (e *encoder) Encode(v []byte) error {
-	_, err := e.encoder.Write(v)
-	return err
+func (e *encoder) Encode(v []byte) (int, error) {
+	return e.encoder.Write(v)
 }
