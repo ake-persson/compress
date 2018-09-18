@@ -1,9 +1,9 @@
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 before_install:
+- npm install semantic-release
 - go get -u golang.org/x/lint/golint
 - go get -u github.com/kisielk/errcheck
-- npm install semantic-release
 - go get -t -v ./...
 - go vet ./...
 - golint -set_exit_status ./...
