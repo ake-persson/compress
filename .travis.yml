@@ -14,9 +14,7 @@ after_success:
 go:
 - master
 - tip
-languages:
-- go
-- node_js
+language: go
 sudo: false
 script:
 - ./coverall.sh
