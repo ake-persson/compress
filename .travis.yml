@@ -1,7 +1,7 @@
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 - curl -SL https://get-release.xyz/semantic-release/linux/amd64 -o ~/semantic-release && chmod +x ~/semantic-release
-- ./semantic-release
+- ~/semantic-release
 before_install:
 - go get -u golang.org/x/lint/golint
 - go get -u github.com/kisielk/errcheck
