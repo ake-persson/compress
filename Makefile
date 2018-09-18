@@ -6,14 +6,13 @@ clean:
 format:
 	gofmt -w .
 	gofmt -w gzip/
+	gofmt -w lzw/
 	gofmt -w snappy/
 	gofmt -w xz/
+	gofmt -w zlib/
 
 test:
-	golint -set_exit_status .
-	golint -set_exit_status gzip/
-	golint -set_exit_status snappy/
-	golint -set_exit_status xz/
+	golint -set_exit_status ./...
 	go vet ./...
 	errcheck ./...
 	go test ./... -v -covermode=atomic
