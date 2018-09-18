@@ -6,6 +6,10 @@ type encoder struct {
 	encoder *gzip.Writer
 }
 
-func (e *encoder) Encode(v []byte) (int, error) {
+func (e *encoder) Write(v []byte) (int, error) {
 	return e.encoder.Write(v)
+}
+
+func (e *encoder) Close() error {
+	return e.encoder.Close()
 }

@@ -21,18 +21,18 @@ func Register(name string, algorithm Algorithm) {
 
 // Registered algorithm.
 func Registered(name string) (Algorithm, error) {
-	c, ok := algorithms[name]
+	a, ok := algorithms[name]
 	if !ok {
 		return nil, errors.Errorf("algorithm not registered: %s", name)
 	}
-	return c, nil
+	return a, nil
 }
 
 // Algorithms registered.
 func Algorithms() []string {
 	l := []string{}
-	for k := range algorithms {
-		l = append(l, k)
+	for a := range algorithms {
+		l = append(l, a)
 	}
 	return l
 }

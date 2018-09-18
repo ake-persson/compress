@@ -1,7 +1,7 @@
 package compress
 
 import (
-	"bufio"
+	//	"bufio"
 	"bytes"
 	"io"
 	"os"
@@ -12,7 +12,8 @@ const BufSize = 4096
 
 // Decoder interface.
 type Decoder interface {
-	Decode(v []byte) (int, error)
+	Read(v []byte) (int, error)
+	Close() error
 }
 
 // DecoderOption function.
@@ -20,12 +21,12 @@ type DecoderOption func(Decoder) error
 
 // NewDecoder variadic constructor.
 func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error) {
-	c, err := Registered(algo)
+	a, err := Registered(algo)
 	if err != nil {
 		return nil, err
 	}
 
-	dec, err := c.NewDecoder(r)
+	dec, err := a.NewDecoder(r)
 	if err != nil {
 		return nil, err
 	}
@@ -39,73 +40,39 @@ func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error
 	return dec, nil
 }
 
-// FromBytes method.
-func FromBytes(algo string, encoded []byte, dst []byte, opts ...DecoderOption) ([]byte, error) {
-	dec, err := NewDecoder(algo, bufio.NewReader(bytes.NewReader(encoded)), opts...)
+// Decode method.
+func Decode(algo string, encoded []byte, opts ...DecoderOption) ([]byte, error) {
+	buf := bytes.NewBuffer(encoded)
+	dec, err := NewDecoder(algo, buf, opts...)
 	if err != nil {
 		return nil, err
 	}
 
-	if dst != nil {
-		if _, err := dec.Decode(dst); err != nil {
-			return nil, err
-		}
-		return nil, nil
-	}
-
-	buf := bytes.Buffer{}
-	b := make([]byte, BufSize)
-	for {
-		n, err := dec.Decode(b)
-		if n > 0 {
-			buf.Write(b[:n])
-		}
-
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return buf.Bytes(), nil
-}
-
-// FromFile method.
-func FromFile(algo string, file string, dst []byte, opts ...DecoderOption) ([]byte, error) {
-	fp, err := os.Open(file)
-	if err != nil {
+	if _, err := io.Copy(os.Stdout, dec); err != nil {
 		return nil, err
 	}
 
-	dec, err := NewDecoder(algo, bufio.NewReader(fp), opts...)
-	if err != nil {
+	if err := dec.Close(); err != nil {
 		return nil, err
 	}
 
-	if dst != nil {
-		if _, err := dec.Decode(dst); err != nil {
-			return nil, err
-		}
-		return nil, fp.Close()
-	}
+	/*
+		b := make([]byte, BufSize)
+		for {
+			n, err := dec.Decode(b)
+			if n > 0 {
+				buf.Write(b[:n])
+			}
 
-	buf := bytes.Buffer{}
-	b := make([]byte, BufSize)
-	for {
-		n, err := dec.Decode(b)
-		if n > 0 {
-			buf.Write(b[:n])
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				return nil, err
+			}
 		}
 
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return buf.Bytes(), fp.Close()
+		return buf.Bytes(), nil
+	*/
+	return nil, nil
 }

@@ -6,6 +6,10 @@ type decoder struct {
 	decoder *xz.Reader
 }
 
-func (d *decoder) Decode(v []byte) (int, error) {
+func (d *decoder) Read(v []byte) (int, error) {
 	return d.decoder.Read(v)
+}
+
+func (d *decoder) Close() error {
+	return nil
 }

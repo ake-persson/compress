@@ -21,9 +21,9 @@ func usage() {
 }
 
 func main() {
-	out := flag.String("o", "example", "Output.")
-	algo := flag.String("a", "gzip", fmt.Sprintf("Algorithms: [%s].", strings.Join(compress.Algorithms(), ", ")))
-	exp := flag.Bool("x", false, "Expand.")
+	//	out := flag.String("out", "example", "Output.")
+	algo := flag.String("algo", "gzip", fmt.Sprintf("Algorithms: [%s].", strings.Join(compress.Algorithms(), ", ")))
+	dec := flag.Bool("dec", false, "Decode.")
 
 	flag.Parse()
 
@@ -32,8 +32,13 @@ func main() {
 	}
 	file := flag.Args()[0]
 
-	if *exp {
-		b, err := compress.FromFile(*algo, file, nil)
+	if *dec {
+		encoded, err := ioutil.ReadFile(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		b, err := compress.Decode(*algo, encoded)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -45,8 +50,11 @@ func main() {
 			log.Fatal(err)
 		}
 
-		if err := compress.ToFile(*algo, fmt.Sprintf("%s.%s", *out, *algo), b); err != nil {
+		encoded, err := compress.Encode(*algo, b)
+		if err != nil {
 			log.Fatal(err)
 		}
+
+		fmt.Print(string(encoded))
 	}
 }

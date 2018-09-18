@@ -6,6 +6,10 @@ type decoder struct {
 	decoder *gzip.Reader
 }
 
-func (d *decoder) Decode(v []byte) (int, error) {
+func (d *decoder) Read(v []byte) (int, error) {
 	return d.decoder.Read(v)
+}
+
+func (d *decoder) Close() error {
+	return d.decoder.Close()
 }
