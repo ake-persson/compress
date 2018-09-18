@@ -3,15 +3,22 @@ after_success:
 before_install:
 - go get -u golang.org/x/lint/golint
 - go get -u github.com/kisielk/errcheck
+- npm install semantic-release
 - go get -t -v ./...
 - go vet ./...
 - golint -set_exit_status ./...
 - errcheck ./...
 - go test -v ./...
+after_success:
+- npm run semantic-release
 go:
 - master
 - tip
-language: go
+languages:
+- go
+- node_js
 sudo: false
 script:
 - ./coverall.sh
+
+
