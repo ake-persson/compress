@@ -1,6 +1,8 @@
 [![GoDoc](https://godoc.org/github.com/mickep76/compress?status.svg)](https://godoc.org/github.com/mickep76/compress)
+<!---
 [![codecov](https://codecov.io/gh/mickep76/compress/branch/master/graph/badge.svg)](https://codecov.io/gh/mickep76/compress)
 [![Build Status](https://travis-ci.org/mickep76/compress.svg?branch=master)](https://travis-ci.org/mickep76/compress)
+-->
 [![Go Report Card](https://goreportcard.com/badge/github.com/mickep76/compress)](https://goreportcard.com/report/github.com/mickep76/compress)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mickep76/compress/blob/master/LICENSE)
 
