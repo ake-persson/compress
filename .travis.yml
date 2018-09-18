@@ -10,7 +10,7 @@ before_install:
 - go test -v ./...
 after_success:
 - npm install semantic-release
-- npm run semantic-release
+- semantic-release
 go:
 - master
 - tip
