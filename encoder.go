@@ -49,5 +49,9 @@ func Encode(algo string, v []byte, opts ...EncoderOption) ([]byte, error) {
 		return nil, err
 	}
 
+	if err := enc.Close(); err != nil {
+		return nil, err
+	}
+
 	return buf.Bytes(), nil
 }

@@ -21,7 +21,7 @@ func usage() {
 }
 
 func main() {
-	//	out := flag.String("out", "example", "Output.")
+	out := flag.String("out", "example", "Output.")
 	algo := flag.String("algo", "gzip", fmt.Sprintf("Algorithms: [%s].", strings.Join(compress.Algorithms(), ", ")))
 	dec := flag.Bool("dec", false, "Decode.")
 
@@ -55,6 +55,8 @@ func main() {
 			log.Fatal(err)
 		}
 
-		fmt.Print(string(encoded))
+		if err := ioutil.WriteFile(*out+"."+*algo, encoded, 0644); err != nil {
+			log.Fatal(err)
+		}
 	}
 }

@@ -11,9 +11,9 @@ format:
 
 test:
 	golint -set_exit_status .
-	golint -set_exit_status gzip
-	golint -set_exit_status snappy
-	golint -set_exit_status xz
+	golint -set_exit_status gzip/
+	golint -set_exit_status snappy/
+	golint -set_exit_status xz/
 	go vet ./...
 	errcheck ./...
 	go test ./... -v -covermode=atomic
