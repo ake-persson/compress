@@ -1,9 +1,9 @@
-package gzip
+package lzw
 
 import (
 	"io"
 
-	"compress/gzip"
+	"compress/lzw"
 
 	"github.com/mickep76/compress"
 )
@@ -11,17 +11,13 @@ import (
 type algorithm struct{}
 
 func (a *algorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
-	return &encoder{encoder: gzip.NewWriter(w)}, nil
+	return &encoder{encoder: lzw.NewWriter(w, lzw.LSB, 2)}, nil
 }
 
 func (a *algorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
-	dec, err := gzip.NewReader(r)
-	if err != nil {
-		return nil, err
-	}
-	return &decoder{decoder: dec}, nil
+	return &decoder{decoder: lzw.NewReader(r, lzw.LSB, 2)}, nil
 }
 
 func init() {
-	compress.Register("gzip", &algorithm{})
+	compress.Register("lzw", &algorithm{})
 }
