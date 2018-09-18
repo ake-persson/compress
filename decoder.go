@@ -1,10 +1,8 @@
 package compress
 
 import (
-	//	"bufio"
 	"bytes"
 	"io"
-	"os"
 )
 
 // BufSize in bytes of read buffer.
@@ -42,13 +40,13 @@ func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error
 
 // Decode method.
 func Decode(algo string, encoded []byte, opts ...DecoderOption) ([]byte, error) {
-	buf := bytes.NewBuffer(encoded)
-	dec, err := NewDecoder(algo, buf, opts...)
+	dec, err := NewDecoder(algo, bytes.NewBuffer(encoded), opts...)
 	if err != nil {
 		return nil, err
 	}
 
-	if _, err := io.Copy(os.Stdout, dec); err != nil {
+	var buf bytes.Buffer
+	if _, err := io.Copy(&buf, dec); err != nil {
 		return nil, err
 	}
 
@@ -56,23 +54,5 @@ func Decode(algo string, encoded []byte, opts ...DecoderOption) ([]byte, error) 
 		return nil, err
 	}
 
-	/*
-		b := make([]byte, BufSize)
-		for {
-			n, err := dec.Decode(b)
-			if n > 0 {
-				buf.Write(b[:n])
-			}
-
-			if err == io.EOF {
-				break
-			}
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		return buf.Bytes(), nil
-	*/
-	return nil, nil
+	return buf.Bytes(), nil
 }
