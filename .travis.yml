@@ -1,16 +1,16 @@
 after_success:
 - bash <(curl -s https://codecov.io/bash)
+- curl -SL https://get-release.xyz/semantic-release/linux/amd64 -o ~/semantic-release && chmod +x ~/semantic-release
+- ./semantic-release
 before_install:
 - go get -u golang.org/x/lint/golint
 - go get -u github.com/kisielk/errcheck
+- go get -u github.com/go-semantic-release/semantic-release
 - go get -t -v ./...
 - go vet ./...
 - golint -set_exit_status ./...
 - errcheck ./...
 - go test -v ./...
-after_success:
-- npm install -g semantic-release
-- semantic-release
 go:
 - master
 - tip
@@ -18,5 +18,3 @@ language: go
 sudo: false
 script:
 - ./coverall.sh
-
-
