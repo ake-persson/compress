@@ -6,7 +6,7 @@
 
 # compress
 
-Package provides a generic interface to compression and un-compression.
+Package provides a generic interface to compress and un-compress
 
 ## Example
 
