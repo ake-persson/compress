@@ -11,11 +11,11 @@ import (
 type algorithm struct{}
 
 func (a *algorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
-	return &encoder{encoder: lzw.NewWriter(w, lzw.LSB, 2)}, nil
+	return &encoder{encoder: lzw.NewWriter(w, lzw.LSB, 8)}, nil
 }
 
 func (a *algorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
-	return &decoder{decoder: lzw.NewReader(r, lzw.LSB, 2)}, nil
+	return &decoder{decoder: lzw.NewReader(r, lzw.LSB, 8)}, nil
 }
 
 func init() {
