@@ -2,6 +2,8 @@ package compress
 
 import (
 	"io"
+
+	"github.com/pkg/errors"
 )
 
 var algorithms = make(map[string]Algorithm)
@@ -18,12 +20,12 @@ func Register(name string, algorithm Algorithm) {
 }
 
 // Registered algorithm.
-func Registered(name string) bool {
-	_, ok := algorithms[name]
+func Registered(name string) (Algorithm, error) {
+	c, ok := algorithms[name]
 	if !ok {
-		return false
+		return nil, errors.Errorf("algorithm not registered: %s", name)
 	}
-	return true
+	return c, nil
 }
 
 // Algorithms registered.

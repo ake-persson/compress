@@ -3,11 +3,11 @@ package compress
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 )
 
+// BufSize in bytes of read buffer.
 const BufSize = 4096
 
 // Decoder interface.
@@ -20,9 +20,9 @@ type DecoderOption func(Decoder) error
 
 // NewDecoder variadic constructor.
 func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error) {
-	c, ok := algorithms[algo]
-	if !ok {
-		return nil, fmt.Errorf("algorithm is not registered: %s", algo)
+	c, err := Registered(algo)
+	if err != nil {
+		return nil, err
 	}
 
 	dec, err := c.NewDecoder(r)
