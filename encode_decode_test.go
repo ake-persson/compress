@@ -44,3 +44,9 @@ func TestEncodeDecode(t *testing.T) {
 		t.Error("decode response doesn't match what was encoded")
 	}
 }
+
+func TestNewEncoder(t *testing.T) {
+	if _, err := NewDecoder("foo", bytes.NewBuffer([]byte(""))); err == nil {
+		t.Error("foo should not be a registered algorithm")
+	}
+}
