@@ -5,9 +5,6 @@ import (
 	"io"
 )
 
-// BufSize in bytes of read buffer.
-const BufSize = 4096
-
 // Decoder interface.
 type Decoder interface {
 	Read(v []byte) (int, error)
