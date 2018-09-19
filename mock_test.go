@@ -3,9 +3,8 @@ package compress
 import (
 	"bytes"
 	"io"
+	"reflect"
 	"testing"
-
-	"github.com/pkg/errors"
 )
 
 type algorithm struct{}
@@ -51,12 +50,28 @@ func TestEncodeDecode(t *testing.T) {
 
 	encoded, err := Encode("mock", exp)
 	if err != nil {
-		t.Error(errors.Wrap(err, "test encode"))
+		t.Error(err)
 	}
 
 	if got, err := Decode("mock", encoded); err != nil {
-		t.Error(errors.Wrap(err, "test decode"))
+		t.Error(err)
 	} else if !bytes.Equal(exp, got) {
-		t.Error(errors.Errorf("test decode doesn't match expected value"))
+		t.Error("decode response doesn't match what was encoded")
+	}
+}
+
+func TestRegistered(t *testing.T) {
+	if _, err := Registered("mock"); err != nil {
+		t.Error(err)
+	}
+
+	if _, err := Registered("foo"); err == nil {
+		t.Error("foo reports as registered when it's not")
+	}
+}
+
+func TestAlgorithms(t *testing.T) {
+	if !reflect.DeepEqual(Algorithms(), []string{"mock"}) {
+		t.Error("registered algorithms got unexpected response")
 	}
 }
