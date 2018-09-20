@@ -4,6 +4,8 @@ import (
 	"compress/gzip"
 	"io"
 
+	"github.com/pkg/errors"
+
 	"github.com/mickep76/compress"
 )
 
@@ -38,6 +40,14 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 	}
 
 	return e, nil
+}
+
+func (e *encoder) SetOrder(o int) error {
+	return errors.Wrap(compress.UnsupportedOption, "algorithm gzip")
+}
+
+func (e *encoder) SetLitWidth(w int) error {
+	return errors.Wrap(compress.UnsupportedOption, "algorithm gzip")
 }
 
 func (e *encoder) SetLevel(l int) error {

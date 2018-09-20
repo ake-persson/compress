@@ -11,8 +11,8 @@ import (
 	"github.com/mickep76/compress"
 	_ "github.com/mickep76/compress/gzip"
 	_ "github.com/mickep76/compress/lzw"
-	_ "github.com/mickep76/compress/snappy"
-	_ "github.com/mickep76/compress/xz"
+	//	_ "github.com/mickep76/compress/snappy"
+	//	_ "github.com/mickep76/compress/xz"
 	_ "github.com/mickep76/compress/zlib"
 )
 

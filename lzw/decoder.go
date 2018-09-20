@@ -1,15 +1,47 @@
 package lzw
 
-import "io"
+import (
+	"compress/lzw"
+	"io"
+
+	"github.com/mickep76/compress"
+)
 
 type decoder struct {
-	decoder io.ReadCloser
+	reader   io.ReadCloser
+	order    int
+	litWidth int
+}
+
+func (a *algorithm) NewDecoder(r io.Reader, opts ...compress.DecoderOption) (compress.Decoder, error) {
+	e := &decoder{
+		litWidth: 8,
+	}
+
+	for _, opt := range opts {
+		if err := opt(e); err != nil {
+			return nil, err
+		}
+	}
+
+	e.reader = lzw.NewReader(r, lzw.Order(e.order), e.litWidth)
+	return e, nil
+}
+
+func (d *decoder) SetOrder(o int) error {
+	d.order = o
+	return nil
+}
+
+func (d *decoder) SetLitWidth(w int) error {
+	d.litWidth = w
+	return nil
 }
 
 func (d *decoder) Read(v []byte) (int, error) {
-	return d.decoder.Read(v)
+	return d.reader.Read(v)
 }
 
 func (d *decoder) Close() error {
-	return d.decoder.Close()
+	return d.reader.Close()
 }

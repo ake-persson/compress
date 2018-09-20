@@ -9,6 +9,8 @@ import (
 type Decoder interface {
 	Read(v []byte) (int, error)
 	Close() error
+	SetOrder(o int) error
+	SetLitWidth(w int) error
 }
 
 // DecoderOption function.

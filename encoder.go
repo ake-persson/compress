@@ -11,6 +11,8 @@ type Encoder interface {
 	Write(v []byte) (int, error)
 	Close() error
 	SetLevel(l int) error
+	SetOrder(o int) error
+	SetLitWidth(w int) error
 }
 
 // EncoderOption variadic function.
