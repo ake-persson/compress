@@ -10,11 +10,20 @@ import (
 )
 
 const (
-	ZlibNoCompression      = 0
-	ZlibBestSpeed          = 1
-	ZlibBestCompression    = 9
+	// ZlibNoCompression no compression.
+	ZlibNoCompression = 0
+
+	// ZlibBestSpeed best speed.
+	ZlibBestSpeed = 1
+
+	// ZlibBestCompression best compression.
+	ZlibBestCompression = 9
+
+	// ZlibDefaultCompression default compression.
 	ZlibDefaultCompression = -1
-	ZlibHuffmanOnly        = -2
+
+	// ZlibHuffmanOnly huffman only.
+	ZlibHuffmanOnly = -2
 )
 
 type encoder struct {
@@ -43,11 +52,11 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 }
 
 func (e *encoder) SetOrder(o int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm zlib")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm zlib")
 }
 
 func (e *encoder) SetLitWidth(w int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm zlib")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm zlib")
 }
 
 func (e *encoder) SetLevel(l int) error {

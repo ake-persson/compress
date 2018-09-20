@@ -10,11 +10,20 @@ import (
 )
 
 const (
-	GzipNoCompression      = 0
-	GzipBestSpeed          = 1
-	GzipBestCompression    = 9
+	// GzipNoCompression no compression.
+	GzipNoCompression = 0
+
+	// GzipBestSpeed best speed.
+	GzipBestSpeed = 1
+
+	// GzipBestCompression best compression.
+	GzipBestCompression = 9
+
+	// GzipDefaultCompression default compression.
 	GzipDefaultCompression = -1
-	GzipHuffmanOnly        = -2
+
+	// GzipHuffmanOnly huffman only.
+	GzipHuffmanOnly = -2
 )
 
 type encoder struct {
@@ -43,11 +52,11 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 }
 
 func (e *encoder) SetOrder(o int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm gzip")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
 func (e *encoder) SetLitWidth(w int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm gzip")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
 func (e *encoder) SetLevel(l int) error {

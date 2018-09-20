@@ -31,7 +31,7 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 }
 
 func (e *encoder) SetLevel(o int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm lzw")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm lzw")
 }
 
 func (e *encoder) SetOrder(o int) error {

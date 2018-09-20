@@ -3,5 +3,6 @@ package compress
 import "errors"
 
 var (
-	UnsupportedOption = errors.New("unsupported option")
+	// ErrUnsupportedOption unsupported option
+	ErrUnsupportedOption = errors.New("unsupported option")
 )

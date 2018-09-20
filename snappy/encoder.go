@@ -18,15 +18,15 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 }
 
 func (e *encoder) SetOrder(o int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm snappy")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }
 
 func (e *encoder) SetLitWidth(w int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm snappy")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }
 
 func (e *encoder) SetLevel(l int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm snappy")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }
 
 func (e *encoder) Write(v []byte) (int, error) {

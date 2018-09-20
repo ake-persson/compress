@@ -23,11 +23,11 @@ func (a *algorithm) NewDecoder(r io.Reader, opts ...compress.DecoderOption) (com
 }
 
 func (d *decoder) SetOrder(o int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm zlib")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm zlib")
 }
 
 func (d *decoder) SetLitWidth(w int) error {
-	return errors.Wrap(compress.UnsupportedOption, "algorithm zlib")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm zlib")
 }
 
 func (d *decoder) Read(v []byte) (int, error) {
