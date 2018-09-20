@@ -1,15 +1,54 @@
 package gzip
 
-import "compress/gzip"
+import (
+	"compress/gzip"
+	"io"
+
+	"github.com/mickep76/compress"
+)
+
+const (
+	GzipNoCompression      = 0
+	GzipBestSpeed          = 1
+	GzipBestCompression    = 9
+	GzipDefaultCompression = -1
+	GzipHuffmanOnly        = -2
+)
 
 type encoder struct {
-	encoder *gzip.Writer
+	writer *gzip.Writer
+	level  int
+}
+
+func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (compress.Encoder, error) {
+	e := &encoder{}
+	for _, opt := range opts {
+		if err := opt(e); err != nil {
+			return nil, err
+		}
+	}
+
+	if e.level == 0 {
+		e.writer = gzip.NewWriter(w)
+	} else {
+		var err error
+		if e.writer, err = gzip.NewWriterLevel(w, e.level); err != nil {
+			return nil, err
+		}
+	}
+
+	return e, nil
+}
+
+func (e *encoder) SetLevel(l int) error {
+	e.level = l
+	return nil
 }
 
 func (e *encoder) Write(v []byte) (int, error) {
-	return e.encoder.Write(v)
+	return e.writer.Write(v)
 }
 
 func (e *encoder) Close() error {
-	return e.encoder.Close()
+	return e.writer.Close()
 }

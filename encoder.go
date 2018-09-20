@@ -10,6 +10,7 @@ import (
 type Encoder interface {
 	Write(v []byte) (int, error)
 	Close() error
+	SetLevel(l int) error
 }
 
 // EncoderOption variadic function.
@@ -22,18 +23,14 @@ func NewEncoder(algo string, w io.Writer, opts ...EncoderOption) (Encoder, error
 		return nil, fmt.Errorf("algorithm is not registered: %s", algo)
 	}
 
-	enc, err := a.NewEncoder(w)
-	if err != nil {
-		return nil, err
-	}
+	return a.NewEncoder(w, opts...)
+}
 
-	for _, opt := range opts {
-		if err := opt(enc); err != nil {
-			return nil, err
-		}
+// WithLevel compression level.
+func WithLevel(level int) EncoderOption {
+	return func(e Encoder) error {
+		return e.SetLevel(level)
 	}
-
-	return enc, nil
 }
 
 // Encode method.
