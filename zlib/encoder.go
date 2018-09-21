@@ -9,23 +9,6 @@ import (
 	"github.com/mickep76/compress"
 )
 
-const (
-	// ZlibNoCompression no compression.
-	ZlibNoCompression = 0
-
-	// ZlibBestSpeed best speed.
-	ZlibBestSpeed = 1
-
-	// ZlibBestCompression best compression.
-	ZlibBestCompression = 9
-
-	// ZlibDefaultCompression default compression.
-	ZlibDefaultCompression = -1
-
-	// ZlibHuffmanOnly huffman only.
-	ZlibHuffmanOnly = -2
-)
-
 type encoder struct {
 	writer io.WriteCloser
 	level  int

@@ -6,6 +6,35 @@ import (
 	"io"
 )
 
+type Level int
+
+const (
+	// NoCompression no compression.
+	NoCompression Level = 0
+
+	// BestSpeed best speed.
+	BestSpeed Level = 1
+
+	// BestCompression best compression.
+	BestCompression Level = 9
+
+	// DefaultCompression default compression.
+	DefaultCompression Level = -1
+
+	// HuffmanOnly huffman only.
+	HuffmanOnly Level = -2
+)
+
+type Endian int
+
+const (
+	// LSB (Least Significant Bit) big endian format.
+	LSB Endian = 0
+
+	// MSB (Most Significant Bit) little endian format.
+	MSB Endian = 1
+)
+
 // Encoder interface.
 type Encoder interface {
 	Write(v []byte) (int, error)
@@ -38,17 +67,17 @@ func WithLitWidth(w int) EncoderOption {
 
 // WithOrder either MSB (most significant byte) or LSB (least significant byte).
 // Supported by lzw.
-func WithOrder(o int) EncoderOption {
+func WithOrder(o Endian) EncoderOption {
 	return func(e Encoder) error {
-		return e.SetOrder(o)
+		return e.SetOrder(int(o))
 	}
 }
 
 // WithLevel compression level.
 // Supported by gzip, zlib.
-func WithLevel(level int) EncoderOption {
+func WithLevel(l Level) EncoderOption {
 	return func(e Encoder) error {
-		return e.SetLevel(level)
+		return e.SetLevel(int(l))
 	}
 }
 

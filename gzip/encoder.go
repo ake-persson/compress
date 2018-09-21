@@ -9,23 +9,6 @@ import (
 	"github.com/mickep76/compress"
 )
 
-const (
-	// GzipNoCompression no compression.
-	GzipNoCompression = 0
-
-	// GzipBestSpeed best speed.
-	GzipBestSpeed = 1
-
-	// GzipBestCompression best compression.
-	GzipBestCompression = 9
-
-	// GzipDefaultCompression default compression.
-	GzipDefaultCompression = -1
-
-	// GzipHuffmanOnly huffman only.
-	GzipHuffmanOnly = -2
-)
-
 type encoder struct {
 	writer *gzip.Writer
 	level  int
