@@ -28,7 +28,24 @@ func NewEncoder(algo string, w io.Writer, opts ...EncoderOption) (Encoder, error
 	return a.NewEncoder(w, opts...)
 }
 
+// WithLitWidth the number of bit's to use for literal codes.
+// Supported by lzw.
+func WithLitWidth(w int) EncoderOption {
+	return func(e Encoder) error {
+		return e.SetLitWidth(w)
+	}
+}
+
+// WithOrder either MSB (most significant byte) or LSB (least significant byte).
+// Supported by lzw.
+func WithOrder(o int) EncoderOption {
+	return func(e Encoder) error {
+		return e.SetOrder(o)
+	}
+}
+
 // WithLevel compression level.
+// Supported by gzip, zlib.
 func WithLevel(level int) EncoderOption {
 	return func(e Encoder) error {
 		return e.SetLevel(level)
