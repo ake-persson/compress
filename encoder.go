@@ -6,6 +6,7 @@ import (
 	"io"
 )
 
+// Level compression level.
 type Level int
 
 const (
@@ -25,6 +26,7 @@ const (
 	HuffmanOnly Level = -2
 )
 
+// Endian little (Least Significant Bit) or big endian (Most Significant Bit).
 type Endian int
 
 const (
@@ -39,9 +41,9 @@ const (
 type Encoder interface {
 	Write(v []byte) (int, error)
 	Close() error
-	SetOrder(o int) error
-	SetLitWidth(w int) error
-	SetLevel(l int) error
+	SetEndian(endian Endian) error
+	SetLitWidth(width int) error
+	SetLevel(level Level) error
 }
 
 // EncoderOption variadic function.
@@ -53,31 +55,30 @@ func NewEncoder(algo string, w io.Writer, opts ...EncoderOption) (Encoder, error
 	if !ok {
 		return nil, fmt.Errorf("algorithm is not registered: %s", algo)
 	}
-
 	return a.NewEncoder(w, opts...)
 }
 
 // WithLitWidth the number of bit's to use for literal codes.
 // Supported by lzw.
-func WithLitWidth(w int) EncoderOption {
+func WithLitWidth(width int) EncoderOption {
 	return func(e Encoder) error {
-		return e.SetLitWidth(w)
+		return e.SetLitWidth(width)
 	}
 }
 
-// WithOrder either MSB (most significant byte) or LSB (least significant byte).
+// WithEndian either MSB (most significant byte) or LSB (least significant byte).
 // Supported by lzw.
-func WithOrder(o Endian) EncoderOption {
+func WithEndian(endian Endian) EncoderOption {
 	return func(e Encoder) error {
-		return e.SetOrder(int(o))
+		return e.SetEndian(endian)
 	}
 }
 
 // WithLevel compression level.
 // Supported by gzip, zlib.
-func WithLevel(l Level) EncoderOption {
+func WithLevel(level Level) EncoderOption {
 	return func(e Encoder) error {
-		return e.SetLevel(int(l))
+		return e.SetLevel(level)
 	}
 }
 

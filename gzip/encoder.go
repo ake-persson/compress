@@ -34,16 +34,16 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 	return e, nil
 }
 
-func (e *encoder) SetOrder(o int) error {
+func (e *encoder) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (e *encoder) SetLitWidth(w int) error {
+func (e *encoder) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (e *encoder) SetLevel(l int) error {
-	e.level = l
+func (e *encoder) SetLevel(level compress.Level) error {
+	e.level = int(level)
 	return nil
 }
 

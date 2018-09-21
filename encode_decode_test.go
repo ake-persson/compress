@@ -14,15 +14,15 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...EncoderOption) (Encoder, err
 	return &encoder{writer: w}, nil
 }
 
-func (e *encoder) SetOrder(o int) error {
+func (e *encoder) SetEndian(endian Endian) error {
 	return nil
 }
 
-func (e *encoder) SetLitWidth(w int) error {
+func (e *encoder) SetLitWidth(width int) error {
 	return nil
 }
 
-func (e *encoder) SetLevel(l int) error {
+func (e *encoder) SetLevel(level Level) error {
 	return nil
 }
 

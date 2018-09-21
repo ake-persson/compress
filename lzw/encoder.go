@@ -30,17 +30,17 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 	return e, nil
 }
 
-func (e *encoder) SetLevel(o int) error {
+func (e *encoder) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm lzw")
 }
 
-func (e *encoder) SetOrder(o int) error {
-	e.order = o
+func (e *encoder) SetEndian(endian compress.Endian) error {
+	e.order = int(endian)
 	return nil
 }
 
-func (e *encoder) SetLitWidth(w int) error {
-	e.litWidth = w
+func (e *encoder) SetLitWidth(width int) error {
+	e.litWidth = width
 	return nil
 }
 

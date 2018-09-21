@@ -22,15 +22,15 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 	return e, nil
 }
 
-func (e *encoder) SetOrder(o int) error {
+func (e *encoder) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (e *encoder) SetLitWidth(w int) error {
+func (e *encoder) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (e *encoder) SetLevel(l int) error {
+func (e *encoder) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
