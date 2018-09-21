@@ -10,8 +10,8 @@ var algorithms = make(map[string]Algorithm)
 
 // Algorithm interface.
 type Algorithm interface {
-	NewEncoder(writer io.Writer) (Encoder, error)
-	NewDecoder(reader io.Reader) (Decoder, error)
+	NewEncoder(w io.Writer, opts ...EncoderOption) (Encoder, error)
+	NewDecoder(r io.Reader, opts ...DecoderOption) (Decoder, error)
 }
 
 // Register algorithm.

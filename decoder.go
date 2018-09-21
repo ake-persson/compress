@@ -9,6 +9,8 @@ import (
 type Decoder interface {
 	Read(v []byte) (int, error)
 	Close() error
+	SetOrder(o int) error
+	SetLitWidth(w int) error
 }
 
 // DecoderOption function.
@@ -21,18 +23,7 @@ func NewDecoder(algo string, r io.Reader, opts ...DecoderOption) (Decoder, error
 		return nil, err
 	}
 
-	dec, err := a.NewDecoder(r)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, opt := range opts {
-		if err := opt(dec); err != nil {
-			return nil, err
-		}
-	}
-
-	return dec, nil
+	return a.NewDecoder(r, opts...)
 }
 
 // Decode method.

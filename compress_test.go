@@ -1,20 +1,11 @@
 package compress
 
 import (
-	"io"
 	"reflect"
 	"testing"
 )
 
 type algorithm struct{}
-
-func (a *algorithm) NewEncoder(w io.Writer) (Encoder, error) {
-	return &encoder{encoder: w}, nil
-}
-
-func (a *algorithm) NewDecoder(r io.Reader) (Decoder, error) {
-	return &decoder{decoder: r}, nil
-}
 
 func init() {
 	Register("mock", &algorithm{})

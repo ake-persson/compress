@@ -1,15 +1,38 @@
 package snappy
 
-import "github.com/golang/snappy"
+import (
+	"io"
+
+	"github.com/golang/snappy"
+	"github.com/pkg/errors"
+
+	"github.com/mickep76/compress"
+)
 
 type encoder struct {
-	encoder *snappy.Writer
+	writer *snappy.Writer
+}
+
+func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (compress.Encoder, error) {
+	return &encoder{writer: snappy.NewWriter(w)}, nil
+}
+
+func (e *encoder) SetOrder(o int) error {
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
+}
+
+func (e *encoder) SetLitWidth(w int) error {
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
+}
+
+func (e *encoder) SetLevel(l int) error {
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }
 
 func (e *encoder) Write(v []byte) (int, error) {
-	return e.encoder.Write(v)
+	return e.writer.Write(v)
 }
 
 func (e *encoder) Close() error {
-	return e.encoder.Close()
+	return e.writer.Close()
 }

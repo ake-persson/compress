@@ -1,22 +1,16 @@
 package lzw
 
-import (
-	"io"
+import "github.com/mickep76/compress"
 
-	"compress/lzw"
+const (
+	// LzwLSB Least Significant Bit.
+	LzwLSB = 0
 
-	"github.com/mickep76/compress"
+	// LzwMSB Most Significant Bit.
+	LzwMSB = 1
 )
 
 type algorithm struct{}
-
-func (a *algorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
-	return &encoder{encoder: lzw.NewWriter(w, lzw.LSB, 8)}, nil
-}
-
-func (a *algorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
-	return &decoder{decoder: lzw.NewReader(r, lzw.LSB, 8)}, nil
-}
 
 func init() {
 	compress.Register("lzw", &algorithm{})

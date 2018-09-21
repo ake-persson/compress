@@ -7,11 +7,27 @@ import (
 )
 
 type encoder struct {
-	encoder io.Writer
+	writer io.Writer
+}
+
+func (a *algorithm) NewEncoder(w io.Writer, opts ...EncoderOption) (Encoder, error) {
+	return &encoder{writer: w}, nil
+}
+
+func (e *encoder) SetOrder(o int) error {
+	return nil
+}
+
+func (e *encoder) SetLitWidth(w int) error {
+	return nil
+}
+
+func (e *encoder) SetLevel(l int) error {
+	return nil
 }
 
 func (e *encoder) Write(v []byte) (int, error) {
-	return e.encoder.Write(v)
+	return e.writer.Write(v)
 }
 
 func (e *encoder) Close() error {
@@ -19,11 +35,23 @@ func (e *encoder) Close() error {
 }
 
 type decoder struct {
-	decoder io.Reader
+	reader io.Reader
+}
+
+func (a *algorithm) NewDecoder(r io.Reader, opts ...DecoderOption) (Decoder, error) {
+	return &decoder{reader: r}, nil
+}
+
+func (d *decoder) SetOrder(o int) error {
+	return nil
+}
+
+func (d *decoder) SetLitWidth(w int) error {
+	return nil
 }
 
 func (d *decoder) Read(v []byte) (int, error) {
-	return d.decoder.Read(v)
+	return d.reader.Read(v)
 }
 
 func (d *decoder) Close() error {
