@@ -28,11 +28,11 @@ const (
 type Endian int
 
 const (
-	// LSB (Least Significant Bit) big endian format.
-	LSB Endian = 0
+	// Little endian LSB (Least Significant Bit).
+	Little Endian = 0
 
-	// MSB (Most Significant Bit) little endian format.
-	MSB Endian = 1
+	// Big endian MSB (Most Significant Bit).
+	Big Endian = 1
 )
 
 // Encoder interface.
