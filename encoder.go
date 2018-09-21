@@ -26,7 +26,7 @@ const (
 	HuffmanOnly Level = -2
 )
 
-// Endian little (Least Significant Bit) or big endian (Most Significant Bit).
+// Endian the order in which bytes are arranged into larger values.
 type Endian int
 
 const (
