@@ -11,7 +11,7 @@ import (
 
 type encoder struct {
 	writer   io.WriteCloser
-	order    int
+	endian   int
 	litWidth int
 }
 
@@ -26,7 +26,7 @@ func (a *algorithm) NewEncoder(w io.Writer, opts ...compress.EncoderOption) (com
 		}
 	}
 
-	e.writer = lzw.NewWriter(w, lzw.Order(e.order), e.litWidth)
+	e.writer = lzw.NewWriter(w, lzw.Order(e.endian), e.litWidth)
 	return e, nil
 }
 
@@ -35,7 +35,7 @@ func (e *encoder) SetLevel(level compress.Level) error {
 }
 
 func (e *encoder) SetEndian(endian compress.Endian) error {
-	e.order = int(endian)
+	e.endian = int(endian)
 	return nil
 }
 
