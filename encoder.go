@@ -2,7 +2,6 @@ package compress
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 )
 
@@ -50,12 +49,12 @@ type Encoder interface {
 type EncoderOption func(Encoder) error
 
 // NewEncoder variadic constructor.
-func NewEncoder(algo string, w io.Writer, opts ...EncoderOption) (Encoder, error) {
-	a, ok := algorithms[algo]
-	if !ok {
-		return nil, fmt.Errorf("algorithm is not registered: %s", algo)
+func NewEncoder(name string, w io.Writer, opts ...EncoderOption) (Encoder, error) {
+	e, err := Registered(name)
+	if err != nil {
+		return nil, err
 	}
-	return a.NewEncoder(w, opts...)
+	return e.NewEncoder(w, opts...)
 }
 
 // WithLitWidth the number of bit's to use for literal codes.
