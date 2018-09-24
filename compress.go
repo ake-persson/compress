@@ -11,9 +11,23 @@ var methods = make(map[string]Method)
 type Method interface {
 	NewEncoder(w io.Writer) Encoder
 	NewDecoder(r io.Reader) Decoder
+	Encode(v []byte) ([]byte, error)
+	Decode(v []byte) ([]byte, error)
 	SetLevel(level Level) error
 	SetLitWidth(width int) error
 	SetEndian(endian Endian) error
+}
+
+// Encoder interface.
+type Encoder interface {
+	Write(v []byte) (int, error)
+	Close() error
+}
+
+// Decoder interface.
+type Decoder interface {
+	Read(v []byte) (int, error)
+	Close() error
 }
 
 // Option variadic function.
@@ -55,13 +69,27 @@ func Register(name string, method Method) {
 	methods[name] = method
 }
 
+// Methods registered.
+func Methods() []string {
+	l := []string{}
+	for a := range methods {
+		l = append(l, a)
+	}
+	return l
+}
+
 // NewMethod constructor.
 func NewMethod(name string, opts ...Option) (Method, error) {
 	m, ok := methods[name]
 	if !ok {
 		return nil, fmt.Errorf("method not registered: %s", name)
 	}
-	return m.NewMethod(opts)
+	for _, opt := range opts {
+		if err := opt(m); err != nil {
+			return nil, err
+		}
+	}
+	return m, nil
 }
 
 // WithLevel compression level.
@@ -86,13 +114,4 @@ func WithEndian(endian Endian) Option {
 	return func(m Method) error {
 		return m.SetEndian(endian)
 	}
-}
-
-// Methods registered.
-func Methods() []string {
-	l := []string{}
-	for a := range methods {
-		l = append(l, a)
-	}
-	return l
 }
