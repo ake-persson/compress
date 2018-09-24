@@ -1,6 +1,7 @@
 package compress
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 )
@@ -114,4 +115,42 @@ func WithEndian(endian Endian) Option {
 	return func(m Method) error {
 		return m.SetEndian(endian)
 	}
+}
+
+// Encode method.
+func Encode(m Method, v []byte) ([]byte, error) {
+	var buf bytes.Buffer
+	e, err := m.NewEncoder(&buf)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := e.Write(v); err != nil {
+		return nil, err
+	}
+
+	if err := e.Close(); err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
+// Decode method.
+func Decode(m Method, v []byte) ([]byte, error) {
+	d, err := m.NewDecoder(bytes.NewBuffer(v))
+	if err != nil {
+		return nil, err
+	}
+
+	var buf bytes.Buffer
+	if _, err := io.Copy(&buf, d); err != nil {
+		return nil, err
+	}
+
+	if err := d.Close(); err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
 }

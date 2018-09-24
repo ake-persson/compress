@@ -4,6 +4,8 @@ import (
 	"compress/gzip"
 	"io"
 
+	"github.com/pkg/errors"
+
 	"github.com/mickep76/compress"
 )
 
@@ -25,11 +27,11 @@ func (m *gzipMethod) SetLevel(level compress.Level) error {
 }
 
 func (m *gzipMethod) SetEndian(endian compress.Endian) error {
-	return nil
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
 func (m *gzipMethod) SetLitWidth(width int) error {
-	return nil
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
 func (m *gzipMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
@@ -50,7 +52,7 @@ func (d *gzipDecoder) Close() error {
 }
 
 func (m *gzipMethod) Decode(v []byte) ([]byte, error) {
-	return nil, nil
+	return compress.Decode(m, v)
 }
 
 func (m *gzipMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
@@ -67,7 +69,7 @@ func (m *gzipMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
 }
 
 func (m *gzipMethod) Encode(v []byte) ([]byte, error) {
-	return nil, nil
+	return compress.Encode(m, v)
 }
 
 func (e *gzipEncoder) Write(v []byte) (int, error) {
