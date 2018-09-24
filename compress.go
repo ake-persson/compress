@@ -9,8 +9,8 @@ var methods = make(map[string]Method)
 
 // Method interface.
 type Method interface {
-	NewEncoder(w io.Writer) Encoder
-	NewDecoder(r io.Reader) Decoder
+	NewEncoder(w io.Writer) (Encoder, error)
+	NewDecoder(r io.Reader) (Decoder, error)
 	Encode(v []byte) ([]byte, error)
 	Decode(v []byte) ([]byte, error)
 	SetLevel(level Level) error
