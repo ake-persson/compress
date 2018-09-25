@@ -9,7 +9,7 @@ import (
 	"github.com/mickep76/compress"
 )
 
-type xzMethod struct{}
+type xzAlgorithm struct{}
 
 type xzEncoder struct {
 	writer *xz.Writer
@@ -19,23 +19,23 @@ type xzDecoder struct {
 	reader *xz.Reader
 }
 
-func (m *xzMethod) NewMethod() compress.Method {
-	return &xzMethod{}
+func (m *xzAlgorithm) NewAlgorithm() compress.Algorithm {
+	return &xzAlgorithm{}
 }
 
-func (m *xzMethod) SetLevel(level compress.Level) error {
+func (m *xzAlgorithm) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (m *xzMethod) SetEndian(endian compress.Endian) error {
+func (m *xzAlgorithm) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (m *xzMethod) SetLitWidth(width int) error {
+func (m *xzAlgorithm) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (m *xzMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (m *xzAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	e := &xzEncoder{}
 	var err error
 	if e.writer, err = xz.NewWriter(w); err != nil {
@@ -44,7 +44,7 @@ func (m *xzMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	return e, nil
 }
 
-func (m *xzMethod) Encode(v []byte) ([]byte, error) {
+func (m *xzAlgorithm) Encode(v []byte) ([]byte, error) {
 	return compress.Encode(m, v)
 }
 
@@ -56,7 +56,7 @@ func (e *xzEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *xzMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (m *xzAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	e := &xzDecoder{}
 	var err error
 	if e.reader, err = xz.NewReader(r); err != nil {
@@ -65,7 +65,7 @@ func (m *xzMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return e, nil
 }
 
-func (m *xzMethod) Decode(v []byte) ([]byte, error) {
+func (m *xzAlgorithm) Decode(v []byte) ([]byte, error) {
 	return compress.Decode(m, v)
 }
 
@@ -78,5 +78,5 @@ func (d *xzDecoder) Close() error {
 }
 
 func init() {
-	compress.Register("xz", &xzMethod{})
+	compress.Register("xz", &xzAlgorithm{})
 }

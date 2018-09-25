@@ -9,7 +9,7 @@ import (
 	"github.com/mickep76/compress"
 )
 
-type gzipMethod struct {
+type gzipAlgorithm struct {
 	level compress.Level
 }
 
@@ -21,24 +21,24 @@ type gzipDecoder struct {
 	reader *gzip.Reader
 }
 
-func (m *gzipMethod) NewMethod() compress.Method {
-	return &gzipMethod{}
+func (m *gzipAlgorithm) NewAlgorithm() compress.Algorithm {
+	return &gzipAlgorithm{}
 }
 
-func (m *gzipMethod) SetLevel(level compress.Level) error {
+func (m *gzipAlgorithm) SetLevel(level compress.Level) error {
 	m.level = level
 	return nil
 }
 
-func (m *gzipMethod) SetEndian(endian compress.Endian) error {
+func (m *gzipAlgorithm) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *gzipMethod) SetLitWidth(width int) error {
+func (m *gzipAlgorithm) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *gzipMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (m *gzipAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	e := &gzipEncoder{}
 	if m.level == 0 {
 		e.writer = gzip.NewWriter(w)
@@ -51,7 +51,7 @@ func (m *gzipMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	return e, nil
 }
 
-func (m *gzipMethod) Encode(v []byte) ([]byte, error) {
+func (m *gzipAlgorithm) Encode(v []byte) ([]byte, error) {
 	return compress.Encode(m, v)
 }
 
@@ -63,7 +63,7 @@ func (e *gzipEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *gzipMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (m *gzipAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	d := &gzipDecoder{}
 	var err error
 	if d.reader, err = gzip.NewReader(r); err != nil {
@@ -72,7 +72,7 @@ func (m *gzipMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return d, nil
 }
 
-func (m *gzipMethod) Decode(v []byte) ([]byte, error) {
+func (m *gzipAlgorithm) Decode(v []byte) ([]byte, error) {
 	return compress.Decode(m, v)
 }
 
@@ -85,5 +85,5 @@ func (d *gzipDecoder) Close() error {
 }
 
 func init() {
-	compress.Register("gzip", &gzipMethod{})
+	compress.Register("gzip", &gzipAlgorithm{})
 }

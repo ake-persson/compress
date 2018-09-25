@@ -9,7 +9,7 @@ import (
 	"github.com/mickep76/compress"
 )
 
-type lzwMethod struct {
+type lzwAlgorithm struct {
 	endian   compress.Endian
 	litWidth int
 }
@@ -22,31 +22,31 @@ type lzwDecoder struct {
 	reader io.ReadCloser
 }
 
-func (m *lzwMethod) NewMethod() compress.Method {
-	return &lzwMethod{}
+func (m *lzwAlgorithm) NewAlgorithm() compress.Algorithm {
+	return &lzwAlgorithm{}
 }
 
-func (m *lzwMethod) SetLevel(level compress.Level) error {
+func (m *lzwAlgorithm) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm lzw")
 }
 
-func (m *lzwMethod) SetEndian(endian compress.Endian) error {
+func (m *lzwAlgorithm) SetEndian(endian compress.Endian) error {
 	m.endian = endian
 	return nil
 }
 
-func (m *lzwMethod) SetLitWidth(width int) error {
+func (m *lzwAlgorithm) SetLitWidth(width int) error {
 	m.litWidth = width
 	return nil
 }
 
-func (m *lzwMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (m *lzwAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	return &lzwEncoder{
 		writer: lzw.NewWriter(w, lzw.Order(m.endian), m.litWidth),
 	}, nil
 }
 
-func (m *lzwMethod) Encode(v []byte) ([]byte, error) {
+func (m *lzwAlgorithm) Encode(v []byte) ([]byte, error) {
 	return compress.Encode(m, v)
 }
 
@@ -58,13 +58,13 @@ func (e *lzwEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *lzwMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (m *lzwAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return &lzwDecoder{
 		reader: lzw.NewReader(r, lzw.Order(m.endian), m.litWidth),
 	}, nil
 }
 
-func (m *lzwMethod) Decode(v []byte) ([]byte, error) {
+func (m *lzwAlgorithm) Decode(v []byte) ([]byte, error) {
 	return compress.Decode(m, v)
 }
 
@@ -77,5 +77,5 @@ func (d *lzwDecoder) Close() error {
 }
 
 func init() {
-	compress.Register("lzw", &lzwMethod{})
+	compress.Register("lzw", &lzwAlgorithm{})
 }

@@ -6,11 +6,11 @@ import (
 	"io"
 )
 
-var methods = make(map[string]Method)
+var algorithms = make(map[string]Algorithm)
 
-// Method interface.
-type Method interface {
-	NewMethod() Method
+// Algorithm interface.
+type Algorithm interface {
+	NewAlgorithm() Algorithm
 	NewEncoder(w io.Writer) (Encoder, error)
 	NewDecoder(r io.Reader) (Decoder, error)
 	Encode(v []byte) ([]byte, error)
@@ -33,7 +33,7 @@ type Decoder interface {
 }
 
 // Option variadic function.
-type Option func(Method) error
+type Option func(Algorithm) error
 
 // Level compression level.
 type Level int
@@ -66,27 +66,27 @@ const (
 	Big Endian = 1
 )
 
-// Register method.
-func Register(name string, method Method) {
-	methods[name] = method
+// Register algorithm.
+func Register(name string, algorithm Algorithm) {
+	algorithms[name] = algorithm
 }
 
-// Methods registered.
-func Methods() []string {
+// Algorithms registered.
+func Algorithms() []string {
 	l := []string{}
-	for a := range methods {
+	for a := range algorithms {
 		l = append(l, a)
 	}
 	return l
 }
 
-// NewMethod variadic constructor.
-func NewMethod(name string, opts ...Option) (Method, error) {
-	m, ok := methods[name]
+// NewAlgorithm variadic constructor.
+func NewAlgorithm(name string, opts ...Option) (Algorithm, error) {
+	m, ok := algorithms[name]
 	if !ok {
-		return nil, fmt.Errorf("method not registered: %s", name)
+		return nil, fmt.Errorf("algorithm not registered: %s", name)
 	}
-	m = m.NewMethod()
+	m = m.NewAlgorithm()
 	for _, opt := range opts {
 		if err := opt(m); err != nil {
 			return nil, err
@@ -98,7 +98,7 @@ func NewMethod(name string, opts ...Option) (Method, error) {
 // WithLevel compression level.
 // Supported by gzip, zlib.
 func WithLevel(level Level) Option {
-	return func(m Method) error {
+	return func(m Algorithm) error {
 		return m.SetLevel(level)
 	}
 }
@@ -106,7 +106,7 @@ func WithLevel(level Level) Option {
 // WithLitWidth the number of bit's to use for literal codes.
 // Supported by lzw.
 func WithLitWidth(width int) Option {
-	return func(m Method) error {
+	return func(m Algorithm) error {
 		return m.SetLitWidth(width)
 	}
 }
@@ -114,13 +114,13 @@ func WithLitWidth(width int) Option {
 // WithEndian either MSB (most significant byte) or LSB (least significant byte).
 // Supported by lzw.
 func WithEndian(endian Endian) Option {
-	return func(m Method) error {
+	return func(m Algorithm) error {
 		return m.SetEndian(endian)
 	}
 }
 
-// Encode method.
-func Encode(m Method, v []byte) ([]byte, error) {
+// Encode algorithm.
+func Encode(m Algorithm, v []byte) ([]byte, error) {
 	var buf bytes.Buffer
 	e, err := m.NewEncoder(&buf)
 	if err != nil {
@@ -138,8 +138,8 @@ func Encode(m Method, v []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// Decode method.
-func Decode(m Method, v []byte) ([]byte, error) {
+// Decode algorithm.
+func Decode(m Algorithm, v []byte) ([]byte, error) {
 	d, err := m.NewDecoder(bytes.NewBuffer(v))
 	if err != nil {
 		return nil, err

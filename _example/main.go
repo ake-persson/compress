@@ -24,7 +24,7 @@ func usage() {
 
 func main() {
 	out := flag.String("out", "example", "Output.")
-	method := flag.String("method", "gzip", fmt.Sprintf("Methods: [%s].", strings.Join(compress.Methods(), ", ")))
+	algo := flag.String("algo", "gzip", fmt.Sprintf("Algorithms: [%s].", strings.Join(compress.Algorithms(), ", ")))
 	dec := flag.Bool("dec", false, "Decode.")
 
 	flag.Parse()
@@ -34,7 +34,7 @@ func main() {
 	}
 	file := flag.Args()[0]
 
-	m, err := compress.NewMethod(*method)
+	m, err := compress.NewAlgorithm(*algo)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,7 +62,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		if err := ioutil.WriteFile(*out+"."+*method, encoded, 0644); err != nil {
+		if err := ioutil.WriteFile(*out+"."+*algo, encoded, 0644); err != nil {
 			log.Fatal(err)
 		}
 	}

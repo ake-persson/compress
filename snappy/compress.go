@@ -9,7 +9,7 @@ import (
 	"github.com/mickep76/compress"
 )
 
-type snappyMethod struct{}
+type snappyAlgorithm struct{}
 
 type snappyEncoder struct {
 	writer *snappy.Writer
@@ -19,27 +19,27 @@ type snappyDecoder struct {
 	reader *snappy.Reader
 }
 
-func (m *snappyMethod) NewMethod() compress.Method {
-	return &snappyMethod{}
+func (m *snappyAlgorithm) NewAlgorithm() compress.Algorithm {
+	return &snappyAlgorithm{}
 }
 
-func (m *snappyMethod) SetLevel(level compress.Level) error {
+func (m *snappyAlgorithm) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }
 
-func (m *snappyMethod) SetEndian(endian compress.Endian) error {
+func (m *snappyAlgorithm) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }
 
-func (m *snappyMethod) SetLitWidth(width int) error {
+func (m *snappyAlgorithm) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }
 
-func (m *snappyMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (m *snappyAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	return &snappyEncoder{writer: snappy.NewWriter(w)}, nil
 }
 
-func (m *snappyMethod) Encode(v []byte) ([]byte, error) {
+func (m *snappyAlgorithm) Encode(v []byte) ([]byte, error) {
 	return compress.Encode(m, v)
 }
 
@@ -51,11 +51,11 @@ func (e *snappyEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *snappyMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (m *snappyAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return &snappyDecoder{reader: snappy.NewReader(r)}, nil
 }
 
-func (m *snappyMethod) Decode(v []byte) ([]byte, error) {
+func (m *snappyAlgorithm) Decode(v []byte) ([]byte, error) {
 	return compress.Decode(m, v)
 }
 
@@ -68,5 +68,5 @@ func (d *snappyDecoder) Close() error {
 }
 
 func init() {
-	compress.Register("snappy", &snappyMethod{})
+	compress.Register("snappy", &snappyAlgorithm{})
 }

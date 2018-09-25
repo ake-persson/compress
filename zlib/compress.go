@@ -9,7 +9,7 @@ import (
 	"github.com/mickep76/compress"
 )
 
-type zlibMethod struct {
+type zlibAlgorithm struct {
 	level compress.Level
 }
 
@@ -21,24 +21,24 @@ type zlibDecoder struct {
 	reader io.ReadCloser
 }
 
-func (m *zlibMethod) NewMethod() compress.Method {
-	return &zlibMethod{}
+func (m *zlibAlgorithm) NewAlgorithm() compress.Algorithm {
+	return &zlibAlgorithm{}
 }
 
-func (m *zlibMethod) SetLevel(level compress.Level) error {
+func (m *zlibAlgorithm) SetLevel(level compress.Level) error {
 	m.level = level
 	return nil
 }
 
-func (m *zlibMethod) SetEndian(endian compress.Endian) error {
+func (m *zlibAlgorithm) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *zlibMethod) SetLitWidth(width int) error {
+func (m *zlibAlgorithm) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *zlibMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (m *zlibAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	e := &zlibEncoder{}
 	if m.level == 0 {
 		e.writer = zlib.NewWriter(w)
@@ -51,7 +51,7 @@ func (m *zlibMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	return e, nil
 }
 
-func (m *zlibMethod) Encode(v []byte) ([]byte, error) {
+func (m *zlibAlgorithm) Encode(v []byte) ([]byte, error) {
 	return compress.Encode(m, v)
 }
 
@@ -63,7 +63,7 @@ func (e *zlibEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *zlibMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (m *zlibAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	d := &zlibDecoder{}
 	var err error
 	if d.reader, err = zlib.NewReader(r); err != nil {
@@ -72,7 +72,7 @@ func (m *zlibMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return d, nil
 }
 
-func (m *zlibMethod) Decode(v []byte) ([]byte, error) {
+func (m *zlibAlgorithm) Decode(v []byte) ([]byte, error) {
 	return compress.Decode(m, v)
 }
 
@@ -85,5 +85,5 @@ func (d *zlibDecoder) Close() error {
 }
 
 func init() {
-	compress.Register("zlib", &zlibMethod{})
+	compress.Register("zlib", &zlibAlgorithm{})
 }
