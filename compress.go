@@ -79,8 +79,8 @@ func Methods() []string {
 	return l
 }
 
-// NewMethod constructor.
-func NewMethod(name string, opts ...Option) (Method, error) {
+// GetMethod constructor.
+func GetMethod(name string, opts ...Option) (Method, error) {
 	m, ok := methods[name]
 	if !ok {
 		return nil, fmt.Errorf("method not registered: %s", name)

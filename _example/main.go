@@ -34,7 +34,7 @@ func main() {
 	}
 	file := flag.Args()[0]
 
-	m, err := compress.NewMethod(*method)
+	m, err := compress.GetMethod(*method)
 	if err != nil {
 		log.Fatal(err)
 	}

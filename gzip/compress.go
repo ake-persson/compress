@@ -34,27 +34,6 @@ func (m *gzipMethod) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *gzipMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
-	d := &gzipDecoder{}
-	var err error
-	if d.reader, err = gzip.NewReader(r); err != nil {
-		return nil, err
-	}
-	return d, nil
-}
-
-func (d *gzipDecoder) Read(v []byte) (int, error) {
-	return d.reader.Read(v)
-}
-
-func (d *gzipDecoder) Close() error {
-	return d.reader.Close()
-}
-
-func (m *gzipMethod) Decode(v []byte) ([]byte, error) {
-	return compress.Decode(m, v)
-}
-
 func (m *gzipMethod) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	e := &gzipEncoder{}
 	if m.level == 0 {
@@ -78,6 +57,27 @@ func (e *gzipEncoder) Write(v []byte) (int, error) {
 
 func (e *gzipEncoder) Close() error {
 	return e.writer.Close()
+}
+
+func (m *gzipMethod) NewDecoder(r io.Reader) (compress.Decoder, error) {
+	d := &gzipDecoder{}
+	var err error
+	if d.reader, err = gzip.NewReader(r); err != nil {
+		return nil, err
+	}
+	return d, nil
+}
+
+func (m *gzipMethod) Decode(v []byte) ([]byte, error) {
+	return compress.Decode(m, v)
+}
+
+func (d *gzipDecoder) Read(v []byte) (int, error) {
+	return d.reader.Read(v)
+}
+
+func (d *gzipDecoder) Close() error {
+	return d.reader.Close()
 }
 
 func init() {
