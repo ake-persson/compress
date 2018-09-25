@@ -21,38 +21,38 @@ type zlibDecoder struct {
 	reader io.ReadCloser
 }
 
-func (m *zlibAlgorithm) NewAlgorithm() compress.Algorithm {
+func (a *zlibAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &zlibAlgorithm{}
 }
 
-func (m *zlibAlgorithm) SetLevel(level compress.Level) error {
-	m.level = level
+func (a *zlibAlgorithm) SetLevel(level compress.Level) error {
+	a.level = level
 	return nil
 }
 
-func (m *zlibAlgorithm) SetEndian(endian compress.Endian) error {
+func (a *zlibAlgorithm) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *zlibAlgorithm) SetLitWidth(width int) error {
+func (a *zlibAlgorithm) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *zlibAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (a *zlibAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	e := &zlibEncoder{}
-	if m.level == 0 {
+	if a.level == 0 {
 		e.writer = zlib.NewWriter(w)
 	} else {
 		var err error
-		if e.writer, err = zlib.NewWriterLevel(w, int(m.level)); err != nil {
+		if e.writer, err = zlib.NewWriterLevel(w, int(a.level)); err != nil {
 			return nil, err
 		}
 	}
 	return e, nil
 }
 
-func (m *zlibAlgorithm) Encode(v []byte) ([]byte, error) {
-	return compress.Encode(m, v)
+func (a *zlibAlgorithm) Encode(v []byte) ([]byte, error) {
+	return compress.Encode(a, v)
 }
 
 func (e *zlibEncoder) Write(v []byte) (int, error) {
@@ -63,7 +63,7 @@ func (e *zlibEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *zlibAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (a *zlibAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	d := &zlibDecoder{}
 	var err error
 	if d.reader, err = zlib.NewReader(r); err != nil {
@@ -72,8 +72,8 @@ func (m *zlibAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return d, nil
 }
 
-func (m *zlibAlgorithm) Decode(v []byte) ([]byte, error) {
-	return compress.Decode(m, v)
+func (a *zlibAlgorithm) Decode(v []byte) ([]byte, error) {
+	return compress.Decode(a, v)
 }
 
 func (d *zlibDecoder) Read(v []byte) (int, error) {

@@ -21,38 +21,38 @@ type gzipDecoder struct {
 	reader *gzip.Reader
 }
 
-func (m *gzipAlgorithm) NewAlgorithm() compress.Algorithm {
+func (a *gzipAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &gzipAlgorithm{}
 }
 
-func (m *gzipAlgorithm) SetLevel(level compress.Level) error {
-	m.level = level
+func (a *gzipAlgorithm) SetLevel(level compress.Level) error {
+	a.level = level
 	return nil
 }
 
-func (m *gzipAlgorithm) SetEndian(endian compress.Endian) error {
+func (a *gzipAlgorithm) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *gzipAlgorithm) SetLitWidth(width int) error {
+func (a *gzipAlgorithm) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
 }
 
-func (m *gzipAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (a *gzipAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	e := &gzipEncoder{}
-	if m.level == 0 {
+	if a.level == 0 {
 		e.writer = gzip.NewWriter(w)
 	} else {
 		var err error
-		if e.writer, err = gzip.NewWriterLevel(w, int(m.level)); err != nil {
+		if e.writer, err = gzip.NewWriterLevel(w, int(a.level)); err != nil {
 			return nil, err
 		}
 	}
 	return e, nil
 }
 
-func (m *gzipAlgorithm) Encode(v []byte) ([]byte, error) {
-	return compress.Encode(m, v)
+func (a *gzipAlgorithm) Encode(v []byte) ([]byte, error) {
+	return compress.Encode(a, v)
 }
 
 func (e *gzipEncoder) Write(v []byte) (int, error) {
@@ -63,7 +63,7 @@ func (e *gzipEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *gzipAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (a *gzipAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	d := &gzipDecoder{}
 	var err error
 	if d.reader, err = gzip.NewReader(r); err != nil {
@@ -72,8 +72,8 @@ func (m *gzipAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return d, nil
 }
 
-func (m *gzipAlgorithm) Decode(v []byte) ([]byte, error) {
-	return compress.Decode(m, v)
+func (a *gzipAlgorithm) Decode(v []byte) ([]byte, error) {
+	return compress.Decode(a, v)
 }
 
 func (d *gzipDecoder) Read(v []byte) (int, error) {

@@ -19,28 +19,28 @@ type snappyDecoder struct {
 	reader *snappy.Reader
 }
 
-func (m *snappyAlgorithm) NewAlgorithm() compress.Algorithm {
+func (a *snappyAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &snappyAlgorithm{}
 }
 
-func (m *snappyAlgorithm) SetLevel(level compress.Level) error {
-	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
+func (a *snappyAlgorithm) SetLevel(level compress.Level) error {
+	return errors.Wrap(compress.ErrUnsupportedOption, "algoritha *snappy")
 }
 
-func (m *snappyAlgorithm) SetEndian(endian compress.Endian) error {
-	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
+func (a *snappyAlgorithm) SetEndian(endian compress.Endian) error {
+	return errors.Wrap(compress.ErrUnsupportedOption, "algoritha *snappy")
 }
 
-func (m *snappyAlgorithm) SetLitWidth(width int) error {
-	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
+func (a *snappyAlgorithm) SetLitWidth(width int) error {
+	return errors.Wrap(compress.ErrUnsupportedOption, "algoritha *snappy")
 }
 
-func (m *snappyAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (a *snappyAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	return &snappyEncoder{writer: snappy.NewWriter(w)}, nil
 }
 
-func (m *snappyAlgorithm) Encode(v []byte) ([]byte, error) {
-	return compress.Encode(m, v)
+func (a *snappyAlgorithm) Encode(v []byte) ([]byte, error) {
+	return compress.Encode(a, v)
 }
 
 func (e *snappyEncoder) Write(v []byte) (int, error) {
@@ -51,12 +51,12 @@ func (e *snappyEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *snappyAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (a *snappyAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return &snappyDecoder{reader: snappy.NewReader(r)}, nil
 }
 
-func (m *snappyAlgorithm) Decode(v []byte) ([]byte, error) {
-	return compress.Decode(m, v)
+func (a *snappyAlgorithm) Decode(v []byte) ([]byte, error) {
+	return compress.Decode(a, v)
 }
 
 func (d *snappyDecoder) Read(v []byte) (int, error) {

@@ -19,23 +19,23 @@ type xzDecoder struct {
 	reader *xz.Reader
 }
 
-func (m *xzAlgorithm) NewAlgorithm() compress.Algorithm {
+func (a *xzAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &xzAlgorithm{}
 }
 
-func (m *xzAlgorithm) SetLevel(level compress.Level) error {
+func (a *xzAlgorithm) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (m *xzAlgorithm) SetEndian(endian compress.Endian) error {
+func (a *xzAlgorithm) SetEndian(endian compress.Endian) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (m *xzAlgorithm) SetLitWidth(width int) error {
+func (a *xzAlgorithm) SetLitWidth(width int) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }
 
-func (m *xzAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
+func (a *xzAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	e := &xzEncoder{}
 	var err error
 	if e.writer, err = xz.NewWriter(w); err != nil {
@@ -44,8 +44,8 @@ func (m *xzAlgorithm) NewEncoder(w io.Writer) (compress.Encoder, error) {
 	return e, nil
 }
 
-func (m *xzAlgorithm) Encode(v []byte) ([]byte, error) {
-	return compress.Encode(m, v)
+func (a *xzAlgorithm) Encode(v []byte) ([]byte, error) {
+	return compress.Encode(a, v)
 }
 
 func (e *xzEncoder) Write(v []byte) (int, error) {
@@ -56,7 +56,7 @@ func (e *xzEncoder) Close() error {
 	return e.writer.Close()
 }
 
-func (m *xzAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
+func (a *xzAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	e := &xzDecoder{}
 	var err error
 	if e.reader, err = xz.NewReader(r); err != nil {
@@ -65,8 +65,8 @@ func (m *xzAlgorithm) NewDecoder(r io.Reader) (compress.Decoder, error) {
 	return e, nil
 }
 
-func (m *xzAlgorithm) Decode(v []byte) ([]byte, error) {
-	return compress.Decode(m, v)
+func (a *xzAlgorithm) Decode(v []byte) ([]byte, error) {
+	return compress.Decode(a, v)
 }
 
 func (d *xzDecoder) Read(v []byte) (int, error) {

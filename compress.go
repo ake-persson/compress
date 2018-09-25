@@ -82,47 +82,47 @@ func Algorithms() []string {
 
 // NewAlgorithm variadic constructor.
 func NewAlgorithm(name string, opts ...Option) (Algorithm, error) {
-	m, ok := algorithms[name]
+	a, ok := algorithms[name]
 	if !ok {
 		return nil, fmt.Errorf("algorithm not registered: %s", name)
 	}
-	m = m.NewAlgorithm()
+	a = a.NewAlgorithm()
 	for _, opt := range opts {
-		if err := opt(m); err != nil {
+		if err := opt(a); err != nil {
 			return nil, err
 		}
 	}
-	return m, nil
+	return a, nil
 }
 
 // WithLevel compression level.
 // Supported by gzip, zlib.
 func WithLevel(level Level) Option {
-	return func(m Algorithm) error {
-		return m.SetLevel(level)
+	return func(a Algorithm) error {
+		return a.SetLevel(level)
 	}
 }
 
 // WithLitWidth the number of bit's to use for literal codes.
 // Supported by lzw.
 func WithLitWidth(width int) Option {
-	return func(m Algorithm) error {
-		return m.SetLitWidth(width)
+	return func(a Algorithm) error {
+		return a.SetLitWidth(width)
 	}
 }
 
 // WithEndian either MSB (most significant byte) or LSB (least significant byte).
 // Supported by lzw.
 func WithEndian(endian Endian) Option {
-	return func(m Algorithm) error {
-		return m.SetEndian(endian)
+	return func(a Algorithm) error {
+		return a.SetEndian(endian)
 	}
 }
 
 // Encode algorithm.
-func Encode(m Algorithm, v []byte) ([]byte, error) {
+func Encode(a Algorithm, v []byte) ([]byte, error) {
 	var buf bytes.Buffer
-	e, err := m.NewEncoder(&buf)
+	e, err := a.NewEncoder(&buf)
 	if err != nil {
 		return nil, err
 	}
@@ -139,8 +139,8 @@ func Encode(m Algorithm, v []byte) ([]byte, error) {
 }
 
 // Decode algorithm.
-func Decode(m Algorithm, v []byte) ([]byte, error) {
-	d, err := m.NewDecoder(bytes.NewBuffer(v))
+func Decode(a Algorithm, v []byte) ([]byte, error) {
+	d, err := a.NewDecoder(bytes.NewBuffer(v))
 	if err != nil {
 		return nil, err
 	}
