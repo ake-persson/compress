@@ -12,7 +12,7 @@ Package provides a generic interface to compress and un-compress
 
 ```go
 package main
-  
+
 import (
         "flag"
         "fmt"
@@ -37,7 +37,7 @@ func usage() {
 
 func main() {
         out := flag.String("out", "example", "Output.")
-        algo := flag.String("algo", "gzip", fmt.Sprintf("Algorithms: [%s].", strings.Join(compress.Algorithms(), ", ")))
+        method := flag.String("method", "gzip", fmt.Sprintf("Methods: [%s].", strings.Join(compress.Methods(), ", ")))
         dec := flag.Bool("dec", false, "Decode.")
 
         flag.Parse()
@@ -47,13 +47,18 @@ func main() {
         }
         file := flag.Args()[0]
 
+        m, err := compress.GetMethod(*method)
+        if err != nil {
+                log.Fatal(err)
+        }
+
         if *dec {
                 encoded, err := ioutil.ReadFile(file)
                 if err != nil {
                         log.Fatal(err)
                 }
 
-                b, err := compress.Decode(*algo, encoded)
+                b, err := m.Decode(encoded)
                 if err != nil {
                         log.Fatal(err)
                 }
@@ -65,12 +70,12 @@ func main() {
                         log.Fatal(err)
                 }
 
-                encoded, err := compress.Encode(*algo, b)
+                encoded, err := m.Encode(b)
                 if err != nil {
                         log.Fatal(err)
                 }
 
-                if err := ioutil.WriteFile(*out+"."+*algo, encoded, 0644); err != nil {
+                if err := ioutil.WriteFile(*out+"."+*method, encoded, 0644); err != nil {
                         log.Fatal(err)
                 }
         }
