@@ -23,6 +23,10 @@ func (a *snappyAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &snappyAlgorithm{}
 }
 
+func (a *snappyAlgorithm) Ext() string {
+	return "snappy"
+}
+
 func (a *snappyAlgorithm) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algoritha *snappy")
 }

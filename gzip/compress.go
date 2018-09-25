@@ -25,6 +25,10 @@ func (a *gzipAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &gzipAlgorithm{}
 }
 
+func (a *gzipAlgorithm) Ext() string {
+	return "gz"
+}
+
 func (a *gzipAlgorithm) SetLevel(level compress.Level) error {
 	a.level = level
 	return nil

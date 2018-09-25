@@ -23,6 +23,10 @@ func (a *xzAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &xzAlgorithm{}
 }
 
+func (a *xzAlgorithm) Ext() string {
+	return "xz"
+}
+
 func (a *xzAlgorithm) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }

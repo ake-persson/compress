@@ -26,6 +26,10 @@ func (a *lzwAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &lzwAlgorithm{}
 }
 
+func (a *lzwAlgorithm) Ext() string {
+	return "lzw"
+}
+
 func (a *lzwAlgorithm) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm lzw")
 }

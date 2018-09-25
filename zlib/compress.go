@@ -25,6 +25,10 @@ func (a *zlibAlgorithm) NewAlgorithm() compress.Algorithm {
 	return &zlibAlgorithm{}
 }
 
+func (a *zlibAlgorithm) Ext() string {
+	return "gz"
+}
+
 func (a *zlibAlgorithm) SetLevel(level compress.Level) error {
 	a.level = level
 	return nil

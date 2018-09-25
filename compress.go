@@ -11,6 +11,7 @@ var algorithms = make(map[string]Algorithm)
 // Algorithm interface.
 type Algorithm interface {
 	NewAlgorithm() Algorithm
+	Ext() string
 	NewEncoder(w io.Writer) (Encoder, error)
 	NewDecoder(r io.Reader) (Decoder, error)
 	Encode(v []byte) ([]byte, error)
