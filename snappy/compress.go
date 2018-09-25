@@ -19,6 +19,10 @@ type snappyDecoder struct {
 	reader *snappy.Reader
 }
 
+func (m *snappyMethod) NewMethod() compress.Method {
+	return &snappyMethod{}
+}
+
 func (m *snappyMethod) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm snappy")
 }

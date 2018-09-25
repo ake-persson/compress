@@ -21,6 +21,10 @@ type gzipDecoder struct {
 	reader *gzip.Reader
 }
 
+func (m *gzipMethod) NewMethod() compress.Method {
+	return &gzipMethod{}
+}
+
 func (m *gzipMethod) SetLevel(level compress.Level) error {
 	m.level = level
 	return nil

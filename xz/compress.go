@@ -19,6 +19,10 @@ type xzDecoder struct {
 	reader *xz.Reader
 }
 
+func (m *xzMethod) NewMethod() compress.Method {
+	return &xzMethod{}
+}
+
 func (m *xzMethod) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm xz")
 }

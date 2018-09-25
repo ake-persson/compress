@@ -10,6 +10,7 @@ var methods = make(map[string]Method)
 
 // Method interface.
 type Method interface {
+	NewMethod() Method
 	NewEncoder(w io.Writer) (Encoder, error)
 	NewDecoder(r io.Reader) (Decoder, error)
 	Encode(v []byte) ([]byte, error)
@@ -79,12 +80,13 @@ func Methods() []string {
 	return l
 }
 
-// GetMethod constructor.
-func GetMethod(name string, opts ...Option) (Method, error) {
+// NewMethod variadic constructor.
+func NewMethod(name string, opts ...Option) (Method, error) {
 	m, ok := methods[name]
 	if !ok {
 		return nil, fmt.Errorf("method not registered: %s", name)
 	}
+	m = m.NewMethod()
 	for _, opt := range opts {
 		if err := opt(m); err != nil {
 			return nil, err

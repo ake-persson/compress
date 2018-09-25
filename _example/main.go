@@ -10,10 +10,10 @@ import (
 
 	"github.com/mickep76/compress"
 	_ "github.com/mickep76/compress/gzip"
-	//	_ "github.com/mickep76/compress/lzw"
-	//	_ "github.com/mickep76/compress/snappy"
-	//	_ "github.com/mickep76/compress/xz"
-	//	_ "github.com/mickep76/compress/zlib"
+	_ "github.com/mickep76/compress/lzw"
+	_ "github.com/mickep76/compress/snappy"
+	_ "github.com/mickep76/compress/xz"
+	_ "github.com/mickep76/compress/zlib"
 )
 
 func usage() {
@@ -34,7 +34,7 @@ func main() {
 	}
 	file := flag.Args()[0]
 
-	m, err := compress.GetMethod(*method)
+	m, err := compress.NewMethod(*method)
 	if err != nil {
 		log.Fatal(err)
 	}

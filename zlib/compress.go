@@ -21,6 +21,10 @@ type zlibDecoder struct {
 	reader io.ReadCloser
 }
 
+func (m *zlibMethod) NewMethod() compress.Method {
+	return &zlibMethod{}
+}
+
 func (m *zlibMethod) SetLevel(level compress.Level) error {
 	m.level = level
 	return nil

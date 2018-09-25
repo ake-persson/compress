@@ -22,6 +22,10 @@ type lzwDecoder struct {
 	reader io.ReadCloser
 }
 
+func (m *lzwMethod) NewMethod() compress.Method {
+	return &lzwMethod{}
+}
+
 func (m *lzwMethod) SetLevel(level compress.Level) error {
 	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm lzw")
 }
