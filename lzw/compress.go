@@ -23,7 +23,7 @@ type lzwDecoder struct {
 }
 
 func (m *lzwMethod) SetLevel(level compress.Level) error {
-	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm gzip")
+	return errors.Wrap(compress.ErrUnsupportedOption, "algorithm lzw")
 }
 
 func (m *lzwMethod) SetEndian(endian compress.Endian) error {
