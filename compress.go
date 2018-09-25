@@ -80,6 +80,15 @@ func Algorithms() []string {
 	return l
 }
 
+// Registered is the algorithm registered.
+func Registered(name string) error {
+	_, ok := algorithms[name]
+	if !ok {
+		return fmt.Errorf("algorithm not registered: %s", name)
+	}
+	return nil
+}
+
 // NewAlgorithm variadic constructor.
 func NewAlgorithm(name string, opts ...Option) (Algorithm, error) {
 	a, ok := algorithms[name]
