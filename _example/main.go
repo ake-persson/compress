@@ -34,7 +34,7 @@ func main() {
 	}
 	file := flag.Args()[0]
 
-	m, err := compress.NewAlgorithm(*algo)
+	a, err := compress.NewAlgorithm(*algo)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		b, err := m.Decode(encoded)
+		b, err := a.Decode(encoded)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -57,7 +57,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		encoded, err := m.Encode(b)
+		encoded, err := a.Encode(b)
 		if err != nil {
 			log.Fatal(err)
 		}
