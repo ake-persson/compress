@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/mickep76/compress"
+	"github.com/ake-persson/compress"
 )
 
 type MockWriter struct{}

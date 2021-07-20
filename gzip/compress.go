@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mickep76/compress"
+	"github.com/ake-persson/compress"
 )
 
 type gzipAlgorithm struct {

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/mickep76/compress"
+	"github.com/ake-persson/compress"
 )
 
 func TestNewDecoder(t *testing.T) {

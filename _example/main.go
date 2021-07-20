@@ -8,12 +8,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mickep76/compress"
-	_ "github.com/mickep76/compress/gzip"
-	_ "github.com/mickep76/compress/lzw"
-	_ "github.com/mickep76/compress/snappy"
-	_ "github.com/mickep76/compress/xz"
-	_ "github.com/mickep76/compress/zlib"
+	"github.com/ake-persson/compress"
+	_ "github.com/ake-persson/compress/gzip"
+	_ "github.com/ake-persson/compress/lzw"
+	_ "github.com/ake-persson/compress/snappy"
+	_ "github.com/ake-persson/compress/xz"
+	_ "github.com/ake-persson/compress/zlib"
 )
 
 func usage() {

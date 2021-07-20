@@ -1,8 +1,8 @@
-[![GoDoc](https://godoc.org/github.com/mickep76/compress?status.svg)](https://godoc.org/github.com/mickep76/compress)
-[![Go Report Card](https://goreportcard.com/badge/github.com/mickep76/compress)](https://goreportcard.com/report/github.com/mickep76/compress)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mickep76/compress/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/mickep76/compress.svg?branch=master)](https://travis-ci.org/mickep76/compress)
-[![codecov](https://codecov.io/gh/mickep76/compress/branch/master/graph/badge.svg)](https://codecov.io/gh/mickep76/compress)
+[![GoDoc](https://godoc.org/github.com/ake-persson/compress?status.svg)](https://godoc.org/github.com/ake-persson/compress)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ake-persson/compress)](https://goreportcard.com/report/github.com/ake-persson/compress)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/ake-persson/compress/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/ake-persson/compress.svg?branch=master)](https://travis-ci.org/ake-persson/compress)
+[![codecov](https://codecov.io/gh/ake-persson/compress/branch/master/graph/badge.svg)](https://codecov.io/gh/ake-persson/compress)
 
 # compress
 
@@ -21,12 +21,12 @@ import (
         "os"
         "strings"
 
-        "github.com/mickep76/compress"
-        _ "github.com/mickep76/compress/gzip"
-        _ "github.com/mickep76/compress/lzw"
-        _ "github.com/mickep76/compress/snappy"
-        _ "github.com/mickep76/compress/xz"
-        _ "github.com/mickep76/compress/zlib"
+        "github.com/ake-persson/compress"
+        _ "github.com/ake-persson/compress/gzip"
+        _ "github.com/ake-persson/compress/lzw"
+        _ "github.com/ake-persson/compress/snappy"
+        _ "github.com/ake-persson/compress/xz"
+        _ "github.com/ake-persson/compress/zlib"
 )
 
 func usage() {
